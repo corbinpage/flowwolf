@@ -1,6 +1,7 @@
 define Result {
 	value : null,
-	displayValue: null
+	displayValue: null,
+	temp: []
 }
 
 define Gender {
@@ -62,15 +63,27 @@ rule Initialize {
 	}
 }
 
-rule yearsLeft {
-	salience: 10;
+rule LifeExpectancy {
+	salience: 11;
 	when {
 		gender : Gender;
 		country : Country;
+		result: Result;
+	}
+	then {
+		if(result.temp.length === 0) {
+			result.temp.push(returnDeathAge(gender, country));
+		}
+	}
+}
+
+rule YearsLeft {
+	salience: 10;
+	when {
 		age : Age;
 		result: Result;
 	}
 	then {
-		result.value = returnDeathAge(gender, country) - age.value;
+		result.value = result.temp[0] - age.value;
 	}
 }
