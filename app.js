@@ -1,26 +1,26 @@
 var nools = require("node_modules/nools/index.js");
 
 var flow = nools.compile(__dirname + "/lifeExpectancy.nools");
+var firedRules = [];
 
-var Message = flow.getDefined("message");
+var Gender = flow.getDefined("gender");
+var Country = flow.getDefined("country");
 var Result = flow.getDefined("result");
 
-var fired1 = [], fired2 = [], fired3 = [];
-
-var session = flow.getSession(new Message("hello"), 'M', new Result())
+var session = flow.getSession(new Gender('M'), new Country('Andorra'));
 
 session
 .on("fire", function (ruleName) {
-	fired3.push(ruleName);
+	firedRules.push(ruleName);
 })
 .match(function(err){
 	if(err){
-        console.log("Example 3", fired3); //[ 'Hello World', 'Hello World2' ]
+        console.log("Rules fired: ", firedRules); //[ 'Hello World', 'Hello World2' ]
         console.log(session.getFacts());    	
         console.error(err.stack);
-      }else{
-        console.log("Example 3", fired3); //[ 'Hello World', 'Hello World2' ]
-        console.log(session.getFacts(Result));
+      } else{
+        console.log("Rules fired: ", firedRules); //[ 'Hello World', 'Hello World2' ]
+        console.log(session.getFacts());
         console.log("done");
       }
    })
