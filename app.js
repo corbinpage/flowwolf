@@ -1,34 +1,62 @@
-var nools = require("node_modules/nools/index.js");
+var express = require('express');
+var path = require('path');
+var favicon = require('serve-favicon');
+var logger = require('morgan');
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
 
-var flow = nools.compile(__dirname + "/lifeExpectancy.nools", {
-	name: "Life Expectancy",
-	scope: {
-		logger: String,
-		lifeExpectancy: String
-	}
+var routes = require('./routes/index');
+var users = require('./routes/users');
+var flows = require('./routes/flows');
+
+var app = express();
+
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'jade');
+
+// uncomment after placing your favicon in /public
+//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(logger('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.use('/', routes);
+app.use('/users', users);
+app.use('/flows', flows);
+
+// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+  var err = new Error('Not Found');
+  err.status = 404;
+  next(err);
 });
-var rulesFired = [];
 
-var Gender = flow.getDefined("Gender");
-var Country = flow.getDefined("Country");
-var Age = flow.getDefined("Age");
-var Result = flow.getDefined("Result");
-var session = flow.getSession(new Gender('M'), new Country('Andorra'), new Age(27));
+// error handlers
 
-session.on("fire", function (ruleName) {
-	rulesFired.push(ruleName);
-})
-.match(function(err){
-	if(err){
-        console.log("Rules fired: ", rulesFired);
-        console.log(session.getFacts());    	
-        console.error(err.stack);
-        console.log("-----Error-----");
-      } 
-      else{
-        console.log("Rules fired: ", rulesFired);
-        console.log(session.getFacts());
-        var result = session.getFacts(Result);
-        console.log("-----Complete-----");
-      }
-    })
+// development error handler
+// will print stacktrace
+if (app.get('env') === 'development') {
+  app.use(function(err, req, res, next) {
+    res.status(err.status || 500);
+    res.render('error', {
+      message: err.message,
+      error: err
+    });
+  });
+}
+
+// production error handler
+// no stacktraces leaked to user
+app.use(function(err, req, res, next) {
+  res.status(err.status || 500);
+  res.render('error', {
+    message: err.message,
+    error: {}
+  });
+});
+
+
+module.exports = app;
