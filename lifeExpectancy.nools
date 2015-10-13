@@ -1,6 +1,6 @@
 define Result {
-	value : -1,
-	displayValue: ''
+	value : null,
+	displayValue: null
 }
 
 define Gender {
@@ -12,6 +12,14 @@ define Gender {
 }
 
 define Country {
+	value : null,
+
+	constructor: function(value){
+		this.value = value;
+	}
+}
+
+define Age {
 	value : null,
 
 	constructor: function(value){
@@ -47,36 +55,22 @@ function returnDeathAge(gender, country) {
 rule Initialize {
 	salience: 1000;
 	when {
-		g : Gender;
-		c : Country;
+		age : Age;
 	}
 	then {
-		assert(new Result())
+		assert(new Result());
 	}
 }
 
-rule LifeExpectancy {
+rule yearsLeft {
 	salience: 10;
 	when {
-		g : Gender;
-		c : Country;
-		r : Result;
+		gender : Gender;
+		country : Country;
+		age : Age;
+		result: Result;
 	}
 	then {
-		modify(r, function(){
-			r.displayValue = returnDeathAge(g, c);
-		});
-		halt();
+		result.value = returnDeathAge(gender, country) - age.value;
 	}
 }
-
-// rule yearsLeft {
-// 	// salience: 1000-2;
-// 	when {
-// 		age  			: Number isNumber(age);
-// 		deathAge 	: Number isNumber(deathAge);
-// 	}
-// 	then {
-// 		console.log('here1');
-// 	}
-// }
