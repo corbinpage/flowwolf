@@ -4,7 +4,7 @@ var router = express.Router();
 /* GET flows */
 router.get('/flows/:id', function(req, res, next) {
 	var FlowController = require('../controllers/flowController');
-	FlowController.setFlowId(req.params.id);
+	FlowController.setFlow(req.params.id);
 	FlowController.setInputs(req.query);
 
 	res.jsonp(FlowController.getReturnValues());

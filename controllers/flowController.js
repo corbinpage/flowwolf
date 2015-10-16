@@ -1,16 +1,20 @@
-var FlowController = {
-	flowId: null,
-	inputs: {},
-	outputs: {},
+var Flow = require("../models/flow.js");
 
-	setFlowId: function(id) { this.flowId = id; },
-	setInputs: function(inputs) { this.inputs = inputs; },
+var FlowController = {
+	flow: Flow,
+
+	setFlow: function(id) { this.flow.setId(id); },
+	setInputs: function(inputs) { this.flow.setInputs(inputs); },
 
 	getReturnValues: function() { 
+		this.flow.setOutputs("asdddf");
+		this.flow.run();
+		console.log("value");
+
 		return {
-			"id ": 			this.flowId,
-			"inputs": 	this.inputs,
-			"outputs": 	this.outputs
+			"id": 			this.flow.id,
+			"inputs": 	this.flow.inputs,
+			"outputs": 	this.flow.outputs
 		}
 	}
 
