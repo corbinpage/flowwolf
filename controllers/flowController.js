@@ -7,9 +7,7 @@ var FlowController = {
 	setInputs: function(inputs) { this.flow.setInputs(inputs); },
 
 	getReturnValues: function() { 
-		this.flow.setOutputs("asdddf");
 		this.flow.run();
-		console.log("value");
 
 		return {
 			"id": 			this.flow.id,
