@@ -17,7 +17,7 @@
     "serve-favicon": "~2.3.0"
   },
   "description": "Rule Engine API",
-  "main": "./bin/www",
+  "main": "app.js",
   "devDependencies": {},
   "repository": {
     "type": "git",
