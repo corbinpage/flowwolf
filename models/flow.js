@@ -22,7 +22,8 @@ var Flow = {
 		}
 	},
 	setSession: function() { 
-		var nools = require('nools/index.js');;
+		var nools = require('nools/index.js');
+		var thisFlow = this;
 		var decision;
 
 		if(nools.hasFlow(this.id)) {
@@ -33,11 +34,29 @@ var Flow = {
 			});
 		}
 
+		this.session = decision.getSession();		
+		var Input = require("./structure.js");
+		var inherits = require('util').inherits;
+
+		Object.keys(thisFlow.inputs).forEach(function(key) {
+			var val = thisFlow.inputs[key];
+			console.log("{" + key + ":" + val + "}");
+			
+			var newInput = function(key, value) {
+				this.key = key;
+				this.value = value;
+			}
+			inherits(newInput, Input);
+			thisFlow.session.assert(new newInput(key,val));
+		});
+
 		var Gender = decision.getDefined("Gender");
 		var Country = decision.getDefined("Country");
 		var Age = decision.getDefined("Age");
 		this.Result = decision.getDefined("Result");
-		this.session = decision.getSession(new Gender('M'), new Country('Andorra'), new Age(27));
+		this.session.assert(new Gender('M'));
+		this.session.assert(new Country('Andorra'));
+		this.session.assert(new Age(27));
 
 	},
 	run: function() {

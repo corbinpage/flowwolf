@@ -1,0 +1,10 @@
+define Input {
+	key: null,
+	value: null,
+	type: null,
+
+	constructor: function(key, value){
+		this.key = key;
+		this.value = value;
+	}
+}

@@ -1,4 +1,4 @@
-var nools = require("node_modules/nools/index.js");
+var nools = require("nools/index.js");
 
 var flow = nools.compile(__dirname + "/lifeExpectancy.nools", {
 	name: "Life Expectancy",
