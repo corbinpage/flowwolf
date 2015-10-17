@@ -22,7 +22,7 @@ var Flow = {
 		}
 	},
 	setSession: function() { 
-		var nools = require("node_modules/nools/index.js");
+		var nools = require('nools/index.js');;
 		var decision;
 
 		if(nools.hasFlow(this.id)) {

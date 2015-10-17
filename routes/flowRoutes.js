@@ -8,7 +8,6 @@ router.get('/flows/:id', function(req, res, next) {
 
 	FlowController.run().then(function(){
 		var returnValues = FlowController.flow.getReturnValues();
-		console.log('Rules Doneski');
 
 		if(Object.keys(returnValues).length) {
 			res.jsonp(returnValues);
