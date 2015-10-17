@@ -6,9 +6,17 @@ var Flow = {
 	setId: function(id) { this.id = id; },
 	setInputs: function(inputs) { this.inputs = inputs; },
 	setOutputs: function(outputs) { this.outputs = outputs; },
+	getReturnValues: function() { 
+		return {
+			"id": 			this.id,
+			"inputs": 	this.inputs,
+			"outputs": 	this.outputs
+		}
+	},
 	run: function() {
 		var nools = require("node_modules/nools/index.js");
 		var decision;
+		var flow = this;
 
 		if(nools.hasFlow("lifeExpectancy")) {
 			decision = nools.getFlow("lifeExpectancy");
@@ -27,27 +35,28 @@ var Flow = {
 		console.log("-----Start-----");
 		console.log(session.getFacts());
 
-		session.on("fire", function (ruleName) {
+		var promise = session.on("fire", function (ruleName) {
 			rulesFired.push(ruleName);
 		})
-		.match(function(err){
-			if(err){
-				console.log("Rules fired: ", rulesFired);
-				console.log(session.getFacts());    	
-				console.error(err.stack);
-				console.log("-----Error-----");
-			} 
-			else{
-				console.log("Rules fired: ", rulesFired);
-				console.log(session.getFacts());
-				var results = session.getFacts(Result);
-				// this.outputs = results;
-				this.outputs = {"output1": 1, "output2": "A"};
-				session.dispose();
-				console.log("-----Complete-----");
-			}
-		})
+		.match();
 
+		promise.then(function(){
+			console.log("Rules fired: ", rulesFired);
+			console.log(session.getFacts());
+			var results = session.getFacts(Result);
+			flow.outputs = {"output1": 1, "output2": "A"};
+			console.log(flow.outputs);
+			session.dispose();
+			console.log("-----Complete-----");
+		},
+		function(err){
+			console.log("Rules fired: ", rulesFired);
+			console.log(session.getFacts());    	
+			console.error(err.stack);
+			console.log("-----Error-----");
+		});
+
+		return promise;
 	}
 
 }

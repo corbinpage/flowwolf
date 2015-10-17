@@ -7,7 +7,20 @@ router.get('/flows/:id', function(req, res, next) {
 	FlowController.setFlow(req.params.id);
 	FlowController.setInputs(req.query);
 
-	res.jsonp(FlowController.getReturnValues());
+	FlowController.run().then(function(){
+		var returnValues = FlowController.flow.getReturnValues();
+		console.log('Rules Doneski');
+
+		if(Object.keys(returnValues).length) {
+			res.jsonp(returnValues);
+		} else {
+			res.jsonp({"Success": "Success, but empty response"});
+		}
+	},
+	function(err){
+		res.jsonp({"Error": "An Error has occurred"});
+	});
+
 });
 
 module.exports = router;
