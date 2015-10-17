@@ -1,5 +1,16 @@
+define Input {
+	key: null,
+	value: null,
+	type: null,
+
+	constructor: function(key, value){
+		this.key = key;
+		this.value = value;
+	}
+}
+
 define Result {
-	value : null,
+	value: null,
 	displayValue: null,
 	temp: []
 }
