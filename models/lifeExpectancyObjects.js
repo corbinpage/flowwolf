@@ -29,21 +29,18 @@ var Gender = function(value) {
 	Input.call(this, 'gender', value);
 };
 Gender.prototype = Object.create(Input.prototype);
-Gender.prototype.constructor = Input;
 Gender.paramLabel = function () { return 'gender';};
 
 var Country = function(value) {
 	Input.call(this, 'country', value);
 };
 Country.prototype = Object.create(Input.prototype);
-Country.prototype.constructor = Input;
-Age.paramLabel = function () { return 'country';};
+Country.paramLabel = function () { return 'country';};
 
 var Age = function(value) {
 	Input.call(this, 'age', value);
 };
 Age.prototype = Object.create(Input.prototype);
-Age.prototype.constructor = Input;
 Age.paramLabel = function () { return 'age';};
 
 module.exports = {

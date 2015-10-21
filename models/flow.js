@@ -23,41 +23,15 @@ var Flow = {
 
 		var customClasses = _.values(thisFlow.customClasses);
 
-		// _.each(queryParams, function(param) {
-		// 	var val = thisFlow.inputs[param];
-
-		// 	var input = new thisFlow.customClasses.Input(param, val);
-
-		// 	thisFlow.session.assert(input);
-
-		// });
-
 		_.each(queryParams, function(param) {
 			var val = thisFlow.inputs[param];
 
 			_.each(customClasses, function(customClass){
 				if(customClass.paramLabel() === param) {
-					console.log("{" + param + ":" + val + "}" + " - " + customClass.paramLabel());
-
-					var newInput = new customClass(val);
-
-					console.log("Param added");
-					console.log(customClass.paramLabel());
-					console.log(customClass);
-
-					console.log(newInput);
-					console.log(newInput.getId());
-					console.log(newInput.value);
-					// console.log(thisFlow.session.getFacts());
-
-
-					thisFlow.session.assert(newInput);
-
-
+					// console.log("{" + param + ":" + val + "}" + " - " + customClass.paramLabel());
+					thisFlow.session.assert(new customClass(val));
 				}
-
 			});			
-
 		});
 	},
 	setOutputs: function(outputs) { this.outputs = outputs; },
