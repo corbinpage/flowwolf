@@ -5,8 +5,9 @@ var FlowController = {
 
 	setFlow: function(id, inputs) {
 		this.flow.findFlow(id);
-		this.flow.setInputs(inputs);
 		this.flow.setSession();
+		this.flow.setInputs(inputs);
+
 	},
 	run: function() { return this.flow.run(); }
 
