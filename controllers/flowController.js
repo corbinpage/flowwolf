@@ -1,16 +1,10 @@
 var Flow = require("../models/flow.js");
 
-var FlowController = {
-	flow: Flow,
-
-	setFlow: function(id, inputs) {
-		this.flow.findFlow(id);
-		this.flow.setSession();
-		this.flow.setInputs(inputs);
-
-	},
-	run: function() { return this.flow.run(); }
-
+var FlowController = function(id, inputs) {
+	this.flow = Flow;
+	this.flow.findFlow(id);
+	this.flow.setSession();
+	this.flow.setInputs(inputs);
 }
 
 module.exports = FlowController;

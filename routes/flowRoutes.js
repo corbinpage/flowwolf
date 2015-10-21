@@ -1,13 +1,13 @@
 var express = require('express');
 var router = express.Router();
+var FlowController = require('../controllers/flowController');
 
 /* GET flows */
 router.get('/flows/:id', function(req, res, next) {
-	var FlowController = require('../controllers/flowController');
-	FlowController.setFlow(req.params.id, req.query);
+	var flowController = new FlowController(req.params.id, req.query);
 
-	FlowController.run().then(function(){
-		var returnValues = FlowController.flow.getReturnValues();
+	flowController.flow.run().then(function(){
+		var returnValues = flowController.flow.getReturnValues();
 
 		if(Object.keys(returnValues).length) {
 			res.jsonp(returnValues);
