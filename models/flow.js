@@ -23,6 +23,15 @@ var Flow = {
 
 		var customClasses = _.values(thisFlow.customClasses);
 
+		// _.each(queryParams, function(param) {
+		// 	var val = thisFlow.inputs[param];
+
+		// 	var input = new thisFlow.customClasses.Input(param, val);
+
+		// 	thisFlow.session.assert(input);
+
+		// });
+
 		_.each(queryParams, function(param) {
 			var val = thisFlow.inputs[param];
 
@@ -30,7 +39,20 @@ var Flow = {
 				if(customClass.paramLabel() === param) {
 					console.log("{" + param + ":" + val + "}" + " - " + customClass.paramLabel());
 
-					thisFlow.session.assert(new customClass(val));
+					var newInput = new customClass(val);
+
+					console.log("Param added");
+					console.log(customClass.paramLabel());
+					console.log(customClass);
+
+					console.log(newInput);
+					console.log(newInput.getId());
+					console.log(newInput.value);
+					// console.log(thisFlow.session.getFacts());
+
+
+					thisFlow.session.assert(newInput);
+
 
 				}
 
@@ -67,15 +89,6 @@ var Flow = {
 
 		this.session = decision.getSession();		
 
-		// var Gender = this.customClasses.Gender;
-		// var Country = this.customClasses.Country;
-		// var Age = this.customClasses.Age;
-
-
-		// this.session.assert(new Gender('M'));
-		// this.session.assert(new Country('Andorra'));
-		// this.session.assert(new Age(27));
-
 	},
 	run: function() {
 		var thisflow = this;
@@ -92,6 +105,7 @@ var Flow = {
 		promise.then(function(){
 			console.log("Rules fired: ", thisflow.rulesFired);
 			console.log(session.getFacts());
+			// console.log(session.getFacts()[0].getName());
 			thisflow.outputs = session.getFacts(thisflow.customClasses.Result);
 			session.dispose();
 			console.log("-----Complete-----");
