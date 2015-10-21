@@ -9,11 +9,10 @@ var Input = function(id, value) {
 	this.value = value;
 	this.label = id.capitalize();
 
-	this.getDisplaySummary = function() {
-		return {
-			id: this.id,
-			value: this.value
-		};
+	this.getDisplay = function() {
+		var display = {};
+		display[this.id] = this.value;
+		return display;
 	};
 
 };
