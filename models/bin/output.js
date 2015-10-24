@@ -10,7 +10,6 @@ Output.prototype.getDisplay = function() {
 	display["value"] = this.value;
 	return display;
 };
-
-Output.paramLabel = function () { return 'output';};
+Output.paramLabel = 'output';
 
 module.exports = Output;

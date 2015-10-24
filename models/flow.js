@@ -11,35 +11,44 @@ var Flow = function(id) {
 };
 
 Flow.prototype.loadCustomClasses = function() {
-	if(this.id) {
-		this.customClasses = require(__dirname + "/" + this.id + "Objects.js");
+	var inherits = require("util").inherits;
+	var Input = require(__dirname + "/bin/" + "input.js");
+	var Output = require(__dirname + "/bin/" + "output.js");
+	var customClassNames = require(__dirname + "/" + this.id + "Objects.js");
+
+	var thisFlow = this;
+
+	if(thisFlow.id) {
+		_.each(customClassNames, function(className) {
+			var newObject = function(value) {
+				newObject.super_.call(this, className.toLowerCase(), value);
+			};
+			inherits(newObject, Input);
+			newObject.paramLabel = className.toLowerCase();
+
+			thisFlow.customClasses[className] = newObject;
+		});
 	}
 
-	var Output = require(__dirname + "/bin/output.js");
 	this.customClasses["Output"] = Output;
 };
 
 Flow.prototype.setInputs = function(inputs) { 
-	var _ = require('underscore');
 	var thisFlow = this;
-
-	this.inputs = [];
-
 	var queryParams = _.keys(inputs);
-
 	var customClasses = _.values(thisFlow.customClasses);
 
 	_.each(queryParams, function(param) {
 		var val = inputs[param];
 
 		_.each(customClasses, function(customClass){
-			if(customClass.paramLabel() === param) {
-					// console.log("{" + param + ":" + val + "}" + " - " + customClass.paramLabel());
-					var input = new customClass(val);
-					thisFlow.session.assert(input);
-					thisFlow.inputs.push(input);
-				}
-			});			
+			if(customClass.paramLabel === param) {
+				// console.log("{" + param + ":" + val + "}" + " - " + customClass.paramLabel);
+				var input = new customClass(val);
+				thisFlow.session.assert(input);
+				thisFlow.inputs.push(input);
+			}
+		});			
 	});
 };
 
@@ -67,6 +76,7 @@ Flow.prototype.getReturnValues = function() {
 	return {
 		"id": 			this.id,
 		"inputs": 	this.inputs.map(function(input) { return input.getDisplay()}),
+		// inputs: this.inputs,
 		"outputs": 	this.outputs.map(function(output) { return output.getDisplay()})
 	}
 };
