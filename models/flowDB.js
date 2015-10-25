@@ -1,4 +1,7 @@
-var Flow = function(id) {
+var FlowSchema = require("../db/schema/flowSchema.js");
+var db = require("../db/db.js");
+
+var FlowDB = function(id) {
 	this.id = id;
 	this.title = id;
 	this.inputs = [];

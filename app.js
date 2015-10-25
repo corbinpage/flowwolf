@@ -4,12 +4,11 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var mongoose = require('mongoose');
 GLOBAL._ = require('underscore');
 GLOBAL._s = require('underscore.string');
 
 var routes = require('./routes/flowRoutes');
-// var users = require('./routes/users');
-// var flows = require('./routes/flows');
 
 var app = express();
 
