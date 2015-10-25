@@ -29,8 +29,8 @@ rule Initialize {
 		age : Age;
 	}
 	then {
-		assert(new YearsLeft("yearsLeft"));
-		assert(new LifeExpectancy("lifeExpectancy"));
+		assert(new YearsLeft("YearsLeft"));
+		assert(new LifeExpectancy("LifeExpectancy"));
 	}
 }
 
@@ -57,6 +57,6 @@ rule YearsLeft {
 		lifeExpectancy: LifeExpectancy;
 	}
 	then {
-		yearsLeft.set(lifeExpectancy.value  - age.value);
+		yearsLeft.value = lifeExpectancy.value  - age.value;
 	}
 }

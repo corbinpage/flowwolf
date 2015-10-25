@@ -54,7 +54,6 @@ Flow.prototype.loadCustomObjects = function() {
 		};
 		inherits(newObject, Output);
 		newObject.className = className;
-		newObject.paramLabel = className.toLowerCase();
 
 		thisFlow.outputObjects.push(newObject);
 	});
