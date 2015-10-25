@@ -29,7 +29,8 @@ rule Initialize {
 		age : Age;
 	}
 	then {
-		assert(new Output());
+		assert(new YearsLeft("yearsLeft"));
+		assert(new LifeExpectancy("lifeExpectancy"));
 	}
 }
 
@@ -38,11 +39,12 @@ rule LifeExpectancy {
 	when {
 		gender : Gender;
 		country : Country;
-		output: Output;
+		yearsLeft: YearsLeft;
+		lifeExpectancy: LifeExpectancy;
 	}
 	then {
-		if(!temp.LifeExpectancy) {
-			temp["LifeExpectancy"] = returnDeathAge(gender, country);
+		if(!lifeExpectancy.value) {
+			lifeExpectancy.value = returnDeathAge(gender, country);
 		}
 	}
 }
@@ -51,9 +53,10 @@ rule YearsLeft {
 	salience: 10;
 	when {
 		age : Age;
-		output: Output;
+		yearsLeft: YearsLeft;
+		lifeExpectancy: LifeExpectancy;
 	}
 	then {
-		output.value = temp["LifeExpectancy"]  - age.value;
+		yearsLeft.set(lifeExpectancy.value  - age.value);
 	}
 }

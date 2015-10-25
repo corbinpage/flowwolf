@@ -3,36 +3,62 @@ var Flow = function(id) {
 	this.displayName = id;
 	this.inputs = [];
 	this.outputs = [];
-	this.session = {};
-	this.customObjects = {};
-	this.rulesFired = [];
-	this.rules = null;
 
-	this.loadFlow();
+	this.rules = null;
+	this.rulesFired = [];
+	this.inputObjects = [];
+	this.outputObjects = [];
+	this.session = {};
+
+	if(this.id) {
+		this.loadFlow();		
+	}
 };
 Flow.nools = require('nools/index.js');
+
+Flow.prototype.objectDefinitions = function() {
+	var customObjects = {};
+
+	_.each(this.inputObjects,function(obj) {
+		customObjects[obj.className] = obj; 
+	})
+
+	_.each(this.outputObjects,function(obj) {
+		customObjects[obj.className] = obj; 
+	})
+
+	return customObjects;
+};
 
 Flow.prototype.loadCustomObjects = function() {
 	var inherits = require("util").inherits;
 	var Input = require(__dirname + "/bin/" + "input.js");
 	var Output = require(__dirname + "/bin/" + "output.js");
-	var CustomObjectNames = require(__dirname + "/" + this.id + "Objects.js");
-
+	var customObjects = require(__dirname + "/" + this.id + "Objects.js");
 	var thisFlow = this;
 
-	if(thisFlow.id) {
-		_.each(CustomObjectNames, function(className) {
-			var newObject = function(value) {
-				newObject.super_.call(this, className.toLowerCase(), value);
-			};
-			inherits(newObject, Input);
-			newObject.paramLabel = className.toLowerCase();
+	_.each(customObjects.inputs, function(className) {
+		var newObject = function(value) {
+			newObject.super_.call(this, className.toLowerCase(), value);
+		};
+		inherits(newObject, Input);
+		newObject.className = className;
+		newObject.paramLabel = className.toLowerCase();
 
-			thisFlow.customObjects[className] = newObject;
-		});
-	}
+		thisFlow.inputObjects.push(newObject);
+	});
 
-	this.customObjects["Output"] = Output;
+	_.each(customObjects.outputs, function(className) {
+		var newObject = function(id) {
+			newObject.super_.call(this, id);
+		};
+		inherits(newObject, Output);
+		newObject.className = className;
+		newObject.paramLabel = className.toLowerCase();
+
+		thisFlow.outputObjects.push(newObject);
+	});
+
 };
 
 Flow.prototype.loadRules = function() {
@@ -59,7 +85,7 @@ Flow.prototype.loadSession = function(optionalInput) {
 				logger: String,
 				temp: {}
 			},
-			define: this.customObjects
+			define: this.objectDefinitions()
 		});
 	}
 
@@ -74,19 +100,14 @@ Flow.prototype.loadSession = function(optionalInput) {
 Flow.prototype.setInputs = function(inputs) { 
 	var thisFlow = this;
 	var queryParams = _.keys(inputs);
-	var CustomObjects = _.values(thisFlow.customObjects);
 
-	_.each(queryParams, function(param) {
-		var val = inputs[param];
-
-		_.each(CustomObjects, function(CustomObject){
-			if(CustomObject.paramLabel === param) {
-				console.log("{" + param + ":" + val + "}" + " - " + CustomObject.paramLabel);
-				var input = new CustomObject(val);
-				thisFlow.session.assert(input);
-				thisFlow.inputs.push(input);
-			}
-		});			
+	_.each(thisFlow.inputObjects, function(InputObject){
+		if(inputs[InputObject.paramLabel]) {
+			// console.log("Parameter: {" + InputObject.paramLabel + ": " + inputs[InputObject.paramLabel] + "}");
+			var input = new InputObject(inputs[InputObject.paramLabel]);
+			thisFlow.inputs.push(input);
+			thisFlow.session.assert(input);
+		}
 	});
 };
 
@@ -111,7 +132,13 @@ Flow.prototype.run = function() {
 	.match();
 
 	promise.then(function(){
-		thisFlow.outputs = session.getFacts(thisFlow.customObjects.Output);
+		_.each(thisFlow.outputObjects, function (obj) {
+			var output = session.getFacts(obj);
+			if(output.length) {
+				thisFlow.outputs = thisFlow.outputs.concat(session.getFacts(obj));				
+			}
+		});		
+
 		console.log("Rules fired: ", thisFlow.rulesFired);
 		thisFlow.dispose();
 		console.log("-----Complete-----");
