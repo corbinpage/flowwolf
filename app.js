@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 GLOBAL._ = require('underscore');
 GLOBAL._s = require('underscore.string');
+global.__base = __dirname + '/';
 
 var routes = require('./routes/flowRoutes');
 
