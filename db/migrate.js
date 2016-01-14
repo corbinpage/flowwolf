@@ -1,26 +1,18 @@
+var Sequelize = require("sequelize");
 var db = require('./db.js');
-var fs = require("fs");
+var models = require('./models.js');
 
-var flow = db.collection('flow');
+var Rule = models.Rule,
+		Input = models.Input,
+		Output = models.Output,
+		Condition = models.Condition,
+		Assignment = models.Assignment;
 
-var noolsFilePath = __dirname + '/../models/lifeExpectancy.nools';
-var rules = fs.readFileSync(noolsFilePath, 'utf8');
+Rule.hasMany(Input);
+Rule.hasMany(Output);
+Rule.hasMany(Condition);
+Rule.hasMany(Assignment);
+Input.hasMany(Condition);
+Output.hasMany(Assignment);
 
-
-db.flow.insert({
-	title: "Life Expectancy",
-	slug: "lifeExpectancy",
-	inputs: ["Gender", "Country", "Age"],
-	outputs: ["YearsLeft", "LifeExpectancy"],
-	rules: rules
-});
-
-db.flow.find().toArray(function(err, items) {
-	console.log(items);
-	console.log(items.length);
-	db.close();
-});
-
-// collection.insert(objectToInsert, function(err,docsInserted){
-//     console.log(docsInserted);
-// });
+db.sync({force: true});
