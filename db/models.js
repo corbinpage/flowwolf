@@ -5,7 +5,8 @@ var Rule = db.define('rule', {
 	tableName: 'rules',
 	underscored: true,
 	id: {type: Sequelize.INTEGER, primaryKey: true},
-	name: { type: Sequelize.STRING}
+	name: { type: Sequelize.STRING},
+	slug: { type: Sequelize.STRING}
 });
 
 var Input = db.define('input', {
