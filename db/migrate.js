@@ -8,11 +8,4 @@ var Rule = models.Rule,
 		Condition = models.Condition,
 		Assignment = models.Assignment;
 
-Rule.hasMany(Input);
-Rule.hasMany(Output);
-Rule.hasMany(Condition);
-Rule.hasMany(Assignment);
-Input.hasMany(Condition);
-Output.hasMany(Assignment);
-
 db.sync({force: true});
