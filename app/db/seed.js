@@ -1,13 +1,11 @@
-var Sequelize = require("sequelize");
-var db = require('./db');
-var models = require('./models');
-
-var Rule = models.Rule;
-var Input = models.Input;
-var Output = models.Output;
-var Condition = models.Condition;
-var Assignment = models.Assignment;
-
+global.__base = __dirname + '/../../';
+var Sequelize = require('sequelize');
+var db = require(__base + 'app/db/db');
+var Rule = require(__base + 'app/models/rule');
+var Input = require(__base + 'app/models/input');
+var Output = require(__base + 'app/models/output');
+var Condition = require(__base + 'app/models/condition');
+var Assignment = require(__base + 'app/models/Assignment');
 
 // Life Expectancy Rules
 

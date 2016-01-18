@@ -2,8 +2,11 @@
   "name": "flowwolf",
   "version": "0.0.1",
   "private": true,
+  "config" : { "port" : "8080" },
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "migrate": "node ./app/db/migrate",
+    "seed": "node ./app/db/seed"
   },
   "dependencies": {
     "body-parser": "^1.14.2",

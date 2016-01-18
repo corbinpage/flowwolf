@@ -1,12 +1,10 @@
 var Flow = require(__base + 'app/models/flow');
 var db = require(__base + 'app/db/db');
-var models = require(__base + 'app/db/models');
-
-var Rule = models.Rule;
-var Input = models.Input;
-var Output = models.Output;
-var Condition = models.Condition;
-var Assignment = models.Assignment;
+var Rule = require(__base + 'app/models/rule');
+var Input = require(__base + 'app/models/input');
+var Output = require(__base + 'app/models/output');
+var Condition = require(__base + 'app/models/condition');
+var Assignment = require(__base + 'app/models/assignment');
 
 
 var Instance = function(flow, inputs) {
@@ -57,7 +55,7 @@ Instance.prototype.run = function() {
 
 	promise.then(function(){
 		console.log(thisSession.getFacts());
-		_.each(thisFlow.outputObjects, function (obj) {
+		thisFlow.outputObjects.forEach(function (obj) {
 			var output = thisSession.getFacts(obj);
 			if(output.length) {
 				thisInstance.outputs = thisInstance.outputs.concat(thisSession.getFacts(obj));				

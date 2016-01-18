@@ -3,11 +3,9 @@ var router = express.Router();
 // var FlowController = require('../controllers/flowController');
 var Flow = require(__base + 'app/models/flow');
 var Instance = require(__base + 'app/models/instance');
-var models = require(__base + 'app/db/models');
-
-var Rule = models.Rule;
-var Input = models.Input;
-var Output = models.Output;
+var Rule = require(__base + 'app/models/rule');
+var Input = require(__base + 'app/models/input');
+var Output = require(__base + 'app/models/output');
 
 /* GET flows */
 router.get('/flows/:id', function(req, res, next) {

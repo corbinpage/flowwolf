@@ -60,7 +60,7 @@ Flow.prototype.getSession = function() {
 	if(Nools.hasFlow(this.slug)) {
 		noolsFlow = Nools.getFlow(this.slug);
 	} else {
-		noolsFlow = Nools.compile(__base + 'app/models/lifeExpectancy.nools', {
+		noolsFlow = Nools.compile(__base + 'app/models/rules/' + this.slug + '.nools', {
 			name: this.title,
 			scope: {
 				logger: String,
