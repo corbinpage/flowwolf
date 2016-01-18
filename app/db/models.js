@@ -1,5 +1,5 @@
 var Sequelize = require("sequelize");
-var db = require('./db.js');
+var db = require('./db');
 
 var Rule = db.define('rule', {
 	id: {type: Sequelize.INTEGER, primaryKey: true},

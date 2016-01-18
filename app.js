@@ -9,12 +9,12 @@ GLOBAL._ = require('underscore');
 GLOBAL._s = require('underscore.string');
 global.__base = __dirname + '/';
 
-var routes = require(__base + 'lib/routes/flowRoutes');
+var routes = require(__base + 'app/routes/flowRoutes');
 
 var app = express();
 
 // view engine setup
-app.set('views', path.join(__base, 'lib/views'));
+app.set('views', path.join(__base, 'app/views'));
 app.set('view engine', 'jade');
 
 // uncomment after placing your favicon in /public

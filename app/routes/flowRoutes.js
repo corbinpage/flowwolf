@@ -1,9 +1,9 @@
 var express = require('express');
 var router = express.Router();
 // var FlowController = require('../controllers/flowController');
-var Flow = require(__base + 'lib/models/flow.js');
-var Instance = require(__base + 'lib/models/instance.js');
-var models = require(__base + 'db/models.js');
+var Flow = require(__base + 'app/models/flow');
+var Instance = require(__base + 'app/models/instance');
+var models = require(__base + 'app/db/models');
 
 var Rule = models.Rule;
 var Input = models.Input;

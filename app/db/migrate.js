@@ -1,6 +1,6 @@
 var Sequelize = require("sequelize");
-var db = require('./db.js');
-var models = require('./models.js');
+var db = require('./db');
+var models = require('./models');
 
 var Rule = models.Rule,
 		Input = models.Input,

@@ -3,7 +3,6 @@ var Sequelize = require("sequelize");
 var db = new Sequelize('dev-db', 'cpage', 'password', {
   host: 'localhost',
   dialect: 'sqlite',
-
   pool: {
     max: 5,
     min: 0,
@@ -11,7 +10,7 @@ var db = new Sequelize('dev-db', 'cpage', 'password', {
   },
 
   // SQLite only
-  storage: 'db/database.sqlite'
+  storage: './app/db/database.sqlite'
 });
 
 module.exports = db;

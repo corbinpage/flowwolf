@@ -1,4 +1,3 @@
-var Db = require(__base + 'db/db.js');
 var Nools = require('nools/index.js');
 
 var Flow = function(data) {
@@ -29,8 +28,8 @@ Flow.prototype.objectDefinitions = function() {
 
 Flow.prototype.loadCustomObjects = function() {
 	var inherits = require("util").inherits;
-	var Input = require(__base + 'lib/models/bin/input.js');
-	var Output = require(__base + 'lib/models/bin/output.js');
+	var Input = require(__base + 'app/models/bin/input');
+	var Output = require(__base + 'app/models/bin/output');
 	var thisFlow = this;
 
 	thisFlow.inputs.forEach(function(className) {
@@ -61,7 +60,7 @@ Flow.prototype.getSession = function() {
 	if(Nools.hasFlow(this.slug)) {
 		noolsFlow = Nools.getFlow(this.slug);
 	} else {
-		noolsFlow = Nools.compile(__base + 'lib/models/lifeExpectancy.nools', {
+		noolsFlow = Nools.compile(__base + 'app/models/lifeExpectancy.nools', {
 			name: this.title,
 			scope: {
 				logger: String,

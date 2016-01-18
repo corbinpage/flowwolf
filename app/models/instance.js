@@ -1,6 +1,6 @@
-var Flow = require(__base + 'lib/models/flow.js');
-var db = require(__base + 'db/db.js');
-var models = require(__base + 'db/models.js');
+var Flow = require(__base + 'app/models/flow');
+var db = require(__base + 'app/db/db');
+var models = require(__base + 'app/db/models');
 
 var Rule = models.Rule;
 var Input = models.Input;
