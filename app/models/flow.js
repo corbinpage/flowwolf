@@ -28,7 +28,9 @@ Flow.prototype.objectDefinitions = function() {
 
 Flow.prototype.loadCustomObjects = function() {
 	var inherits = require("util").inherits;
-	var Input = require(__base + 'app/models/bin/input');
+	// var Input = require(__base + 'app/models/bin/input');
+	// var Output = require(__base + 'app/models/bin/output');
+	var Input = require(__base + 'app/models/binß/input');
 	var Output = require(__base + 'app/models/bin/output');
 	var thisFlow = this;
 

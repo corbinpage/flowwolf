@@ -1,15 +1,11 @@
 global.__base = __dirname + '/../../';
 var Sequelize = require('sequelize');
 var db = require(__base + 'app/db/db');
-var Rule = require(__base + 'app/models/rule');
-var Input = require(__base + 'app/models/input');
-var Output = require(__base + 'app/models/output');
-var Condition = require(__base + 'app/models/condition');
-var Assignment = require(__base + 'app/models/Assignment');
+var models = require(__base + 'app/models/persistent/index');
 
 // Life Expectancy Rules
 
-Rule.create({
+models.Rule.create({
 	"id": 1,
 	"name": "Life Expectancy",
 	"slug": "lifeExpectancy",
@@ -107,24 +103,24 @@ rule YearsLeft {
 
 });
 
-Input.bulkCreate([
+models.Input.bulkCreate([
 	{"id": 1, "name": "Gender", "rule_id": 1},
 	{"id": 2, "name": "Country", "rule_id": 1},
 	{"id": 3, "name": "Age", "rule_id": 1}
 ]);
 
-Condition.bulkCreate([
+models.Condition.bulkCreate([
 	{"input_id": 1, "operator": "=", value: "M", "rule_id": 1},
 	{"input_id": 2, "operator": "=", value: "USA", "rule_id": 1},
 	{"input_id": 3, "operator": "=", value: "28", "rule_id": 1}
 ]);
 
-Output.bulkCreate([
+models.Output.bulkCreate([
 	{"id": 1, "name": "YearsLeft", "rule_id": 1},
 	{"id": 2, "name": "LifeExpectancy", "rule_id": 1}
 ]);
 
-Assignment.bulkCreate([
+models.Assignment.bulkCreate([
 	{"output_id": 1, value: "60", "rule_id": 1},
 	{"output_id": 2, value: "88", "rule_id": 1}
 ]);
