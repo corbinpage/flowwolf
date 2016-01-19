@@ -3,8 +3,8 @@ var Nools = require('nools/index.js');
 var Flow = function(data) {
 	this.title = data.title;
 	this.slug = data.slug;
-	this.inputs = data.inputs.map(function(i) {return i.name});
-	this.outputs = data.outputs.map(function(o) {return o.name});
+	this.inputs = data.Inputs.map(function(i) {return i.name});
+	this.outputs = data.Outputs.map(function(o) {return o.name});
 	this.nools = data.nools;
 
 	this.inputObjects = [];
@@ -28,9 +28,7 @@ Flow.prototype.objectDefinitions = function() {
 
 Flow.prototype.loadCustomObjects = function() {
 	var inherits = require("util").inherits;
-	// var Input = require(__base + 'app/models/bin/input');
-	// var Output = require(__base + 'app/models/bin/output');
-	var Input = require(__base + 'app/models/binß/input');
+	var Input = require(__base + 'app/models/bin/input');
 	var Output = require(__base + 'app/models/bin/output');
 	var thisFlow = this;
 

@@ -3,15 +3,13 @@ var router = express.Router();
 // var FlowController = require('../controllers/flowController');
 var Flow = require(__base + 'app/models/flow');
 var Instance = require(__base + 'app/models/instance');
-var Rule = require(__base + 'app/models/rule');
-var Input = require(__base + 'app/models/input');
-var Output = require(__base + 'app/models/output');
+var models = require(__base + 'app/models/persistent/index');
 
 /* GET flows */
 router.get('/flows/:id', function(req, res, next) {
-	Rule.findOne({
+	models.Rule.findOne({
 		where: {slug: req.params.id},
-		include: [Input, Output]
+		include: [models.Input, models.Output]
 	}).then(function(rule) {
 		var flow = new Flow(rule);
 		var instance = new Instance(flow, req.query);
