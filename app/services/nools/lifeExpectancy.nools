@@ -1,0 +1,62 @@
+function returnDeathAge(gender, country) {
+	var countryList = ["USA", "Japan","Australia","France","Iceland"];
+	var averageLifeExpectancy = [77, 84, 72, 71, 72];
+	var maleLifeExpectancy = [78, 80, 71, 71, 72];
+	var femaleLifeExpectancy = [76, 87, 73, 71, 72];
+
+	var ageArray = averageLifeExpectancy;
+	if(gender.value === 'M') {
+		ageArray = maleLifeExpectancy;
+	} else if(gender.value === 'F') {
+		ageArray = femaleLifeExpectancy;
+	}
+
+	var countryIndex = countryList.indexOf(country.value);
+	if(countryIndex === -1) {
+		var sum = 0;
+		ageArray.forEach(function(num){sum+=parseFloat(num) || 0;});
+		sum = Math.round(sum/ageArray.length);
+		return sum;
+	} else {
+		return ageArray[countryIndex];
+	}
+
+}
+
+rule Initialize {
+	salience: 1000;
+	when {
+		age : Age;
+	}
+	then {
+		assert(new YearsLeft("YearsLeft"));
+		assert(new LifeExpectancy("LifeExpectancy"));
+	}
+}
+
+rule LifeExpectancy {
+	salience: 11;
+	when {
+		gender : Gender;
+		country : Country;
+		yearsLeft: YearsLeft;
+		lifeExpectancy: LifeExpectancy;
+	}
+	then {
+		if(!lifeExpectancy.value) {
+			lifeExpectancy.value = returnDeathAge(gender, country);
+		}
+	}
+}
+
+rule YearsLeft {
+	salience: 10;
+	when {
+		age : Age;
+		yearsLeft: YearsLeft;
+		lifeExpectancy: LifeExpectancy;
+	}
+	then {
+		yearsLeft.value = lifeExpectancy.value  - age.value;
+	}
+}

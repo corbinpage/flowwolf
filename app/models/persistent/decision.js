@@ -10,7 +10,9 @@ module.exports = function(db, Sequelize) {
 		underscored: true,
 		classMethods: {
 			associate: function(models) {
-				Decision.hasMany(models.Rule)
+				Decision.hasMany(models.Rule),
+				Decision.hasMany(models.Input),
+				Decision.hasMany(models.Output)
 			}
 		}
 	});

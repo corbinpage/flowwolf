@@ -1,6 +1,6 @@
 var Nools = require('nools/index.js');
 
-var Flow = function(data) {
+var NoolsService = function(data) {
 	this.title = data.name;
 	this.slug = data.slug;
 	this.inputs = data.Inputs.map(function(i) {return i.name});

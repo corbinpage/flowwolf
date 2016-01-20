@@ -7,11 +7,11 @@ var models = require(__base + 'app/models/persistent/index');
 
 /* GET flows */
 router.get('/flows/:id', function(req, res, next) {
-	models.Rule.findOne({
+	models.Decision.findOne({
 		where: {slug: req.params.id},
 		include: [models.Input, models.Output]
-	}).then(function(rule) {
-		var flow = new Flow(rule);
+	}).then(function(decision) {
+		var flow = new Flow(decision);
 		var instance = new Instance(flow, req.query);
 
 		instance.run().then(function(){
