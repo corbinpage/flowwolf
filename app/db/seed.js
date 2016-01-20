@@ -4,6 +4,12 @@ var db = require(__base + 'app/db/db');
 var models = require(__base + 'app/models/persistent/index');
 
 // Life Expectancy Rules
+models.Decision.create({
+	"id": 1,
+	"name": "Life Expectancy",
+	"slug": "lifeExpectancy",
+	"nools": "text"
+});
 
 models.Rule.create({
 	"id": 1,

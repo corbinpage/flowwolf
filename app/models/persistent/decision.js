@@ -1,21 +1,19 @@
 module.exports = function(db, Sequelize) {
-	var Rule = db.define("Rule", {
+	var Decision = db.define("Decision", {
 		id: {type: Sequelize.INTEGER, primaryKey: true},
 		name: { type: Sequelize.STRING},
+		description: { type: Sequelize.TEXT},
 		slug: { type: Sequelize.STRING},
 		nools: { type: Sequelize.TEXT}
 	}, {
-		tableName: 'rules',
+		tableName: 'decisions',
 		underscored: true,
 		classMethods: {
 			associate: function(models) {
-				Rule.hasMany(models.Input)
-				Rule.hasMany(models.Output),
-				Rule.hasMany(models.Condition),
-				Rule.hasMany(models.Action)
+				Decision.hasMany(models.Rule)
 			}
 		}
 	});
 
-	return Rule;
+	return Decision;
 };

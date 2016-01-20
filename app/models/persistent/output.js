@@ -9,7 +9,7 @@ module.exports = function(db, Sequelize) {
 		classMethods: {
 			associate: function(models) {
 				Output.belongsTo(models.Rule),
-				Output.belongsTo(models.Assignment)
+				Output.belongsTo(models.Action)
 			}
 		},
 		instanceMethods: {
