@@ -1,14 +1,18 @@
-var Flow = require(__base + 'app/models/flow');
+var NoolsService = require(__base + 'app/services/noolsService');
 var db = require(__base + 'app/db/db');
 
-var Instance = function(flow, inputs) {
-	this._id = null;
-	this.inputs = [];
-	this.outputs = [];
+var Instance = function(decision, inputs) {
+	this.decision_id = decision.id;
+	this.rulesService = "nools";
 	this.rulesFired = [];
-	this.flow = flow;
-	this.session = flow.getSession();	
-	this.setInputs(inputs);
+
+	if(this.rulesService === "nools") {
+		this.flow = new NoolsService(decision);
+		this.session = this.flow.getSession();
+		this.inputs = [];
+		this.outputs = [];
+		this.setInputs(inputs);
+	}
 };
 
 Instance.prototype.setInputs = function(inputs) { 
@@ -28,7 +32,6 @@ Instance.prototype.setInputs = function(inputs) {
 
 Instance.prototype.getReturnValues = function() { 
 	return {
-		"_id": 			this._id,
 		"inputs": 	this.inputs.map(function(i) { return i.getDisplay()}),
 		"outputs": 	this.outputs.map(function(o) { return o.getDisplay()}),
 		"rulesFired": this.rulesFired

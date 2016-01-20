@@ -1,7 +1,5 @@
 var express = require('express');
 var router = express.Router();
-// var FlowController = require('../controllers/flowController');
-var Flow = require(__base + 'app/models/flow');
 var Instance = require(__base + 'app/models/instance');
 var models = require(__base + 'app/models/persistent/index');
 
@@ -11,8 +9,7 @@ router.get('/flows/:id', function(req, res, next) {
 		where: {slug: req.params.id},
 		include: [models.Input, models.Output]
 	}).then(function(decision) {
-		var flow = new Flow(decision);
-		var instance = new Instance(flow, req.query);
+		var instance = new Instance(decision, req.query);
 
 		instance.run().then(function(){
 			var returnValues = instance.getReturnValues();

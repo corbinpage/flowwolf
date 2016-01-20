@@ -12,7 +12,7 @@ var NoolsService = function(data) {
 	this.loadCustomObjects();
 };
 
-Flow.prototype.objectDefinitions = function() {
+NoolsService.prototype.objectDefinitions = function() {
 	var customObjects = {};
 
 	this.inputObjects.forEach(function(obj) {
@@ -26,13 +26,13 @@ Flow.prototype.objectDefinitions = function() {
 	return customObjects;
 };
 
-Flow.prototype.loadCustomObjects = function() {
+NoolsService.prototype.loadCustomObjects = function() {
 	var inherits = require("util").inherits;
 	var Input = require(__base + 'app/models/bin/input');
 	var Output = require(__base + 'app/models/bin/output');
-	var thisFlow = this;
+	var thisNoolsService = this;
 
-	thisFlow.inputs.forEach(function(className) {
+	thisNoolsService.inputs.forEach(function(className) {
 		var newObject = function(value) {
 			newObject.super_.call(this, className, value);
 		};
@@ -40,27 +40,27 @@ Flow.prototype.loadCustomObjects = function() {
 		newObject.className = className;
 		newObject.paramLabel = className.toLowerCase();;
 
-		thisFlow.inputObjects.push(newObject);
+		thisNoolsService.inputObjects.push(newObject);
 	});
 
-	thisFlow.outputs.forEach(function(className) {
+	thisNoolsService.outputs.forEach(function(className) {
 		var newObject = function(id) {
 			newObject.super_.call(this, id);
 		};
 		inherits(newObject, Output);
 		newObject.className = className;
 
-		thisFlow.outputObjects.push(newObject);
+		thisNoolsService.outputObjects.push(newObject);
 	});
 };
 
-Flow.prototype.getSession = function() {
-	var noolsFlow;
+NoolsService.prototype.getSession = function() {
+	var noolsNoolsService;
 
 	if(Nools.hasFlow(this.slug)) {
-		noolsFlow = Nools.getFlow(this.slug);
+		noolsNoolsService = Nools.getFlow(this.slug);
 	} else {
-		noolsFlow = Nools.compile(this.nools, {
+		noolsNoolsService = Nools.compile(this.nools, {
 			name: this.slug,
 			scope: {
 				logger: String,
@@ -70,12 +70,12 @@ Flow.prototype.getSession = function() {
 		});
 	}
 
-	return noolsFlow.getSession();
+	return noolsNoolsService.getSession();
 };
 
 
-Flow.prototype.dispose = function() {
+NoolsService.prototype.dispose = function() {
 	Nools.deleteFlow(this.slug);
 };
 
-module.exports = Flow;
+module.exports = NoolsService;
