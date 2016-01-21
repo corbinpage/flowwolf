@@ -51,7 +51,7 @@ NoolsService.prototype.getOutputs = function() {
 		var output = thisSession.getFacts(obj);
 		if(output.length) {
 			output.forEach(function(o) {
-				returnOutputs.push(o[0].getDisplay());	
+				returnOutputs.push(o.getDisplay());	
 			})			
 		}
 	});
