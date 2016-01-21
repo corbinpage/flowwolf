@@ -1,7 +1,7 @@
 global.__base = __dirname + '/../../';
 var Sequelize = require('sequelize');
 var db = require(__base + 'app/db/db');
-var models = require(__base + 'app/models/persistent/index');
+var models = require(__base + 'app/models/index');
 
 // Life Expectancy Rules
 models.Decision.create({

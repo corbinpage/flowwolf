@@ -1,5 +1,6 @@
 var NoolsService = require(__base + 'app/services/noolsService');
-var db = require(__base + 'app/db/db');
+var models = require(__base + 'app/models/index');
+
 
 var Instance = function(decision, inputs) {
 	this.decision_id = decision.id;
@@ -54,6 +55,13 @@ Instance.prototype.run = function() {
 	promise.then(function(){
 		thisInstance.setOutputs();
 		thisInstance.dispose();
+
+		models.Run.create({
+			"decision_id": thisInstance.decision_id,
+			"inputs": JSON.stringify(thisInstance.inputs),
+			"outputs": JSON.stringify(thisInstance.outputs),
+			"rulesFired": JSON.stringify(thisInstance.rulesFired)
+		});
 		console.log("Rules fired: ", thisInstance.rulesFired);
 		console.log("-----Complete-----");
 	},

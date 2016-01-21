@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var Instance = require(__base + 'app/models/instance');
-var models = require(__base + 'app/models/persistent/index');
+var models = require(__base + 'app/models/index');
 
 /* GET flows */
 router.get('/flows/:id', function(req, res, next) {
