@@ -3,64 +3,58 @@ var db = require(__base + 'app/db/db');
 
 var Instance = function(decision, inputs) {
 	this.decision_id = decision.id;
-	this.rulesService = "nools";
+	this.setInputs(inputs);
+	this.outputs = [];
 	this.rulesFired = [];
 
+	this.rulesService = "nools";
+
 	if(this.rulesService === "nools") {
-		this.flow = new NoolsService(decision);
-		this.session = this.flow.getSession();
-		this.inputs = [];
-		this.outputs = [];
-		this.setInputs(inputs);
+		this.service = new NoolsService(decision);
+		this.service.setInputs(inputs);
 	}
 };
 
-Instance.prototype.setInputs = function(inputs) { 
-	var thisInstance = this;
-	var thisSession = this.session;
-	var thisFlow = this.flow;
+Instance.prototype.setInputs = function(inputs) {
+	this.inputs = [];
+	thisInstance = this;
+	if(inputs) {
+		Object.keys(inputs).forEach(function(k) {
+			var obj = {};
+			obj[k] = inputs[k];
+			thisInstance.inputs.push(obj);
+		});
+	}
+};
 
-	thisFlow.inputObjects.forEach(function(InputObject){
-		if(inputs[InputObject.paramLabel]) {
-			// console.log("Parameter: {" + InputObject.paramLabel + ": " + inputs[InputObject.paramLabel] + "}");
-			var input = new InputObject(inputs[InputObject.paramLabel]);
-			thisInstance.inputs.push(input);
-			thisSession.assert(input);
-		}
-	});
+Instance.prototype.setOutputs = function() {
+	this.outputs = this.service.getOutputs();
 };
 
 Instance.prototype.getReturnValues = function() { 
 	return {
-		"inputs": 	this.inputs.map(function(i) { return i.getDisplay()}),
-		"outputs": 	this.outputs.map(function(o) { return o.getDisplay()}),
+		"inputs": 	this.inputs,
+		"outputs": 	this.outputs,
 		"rulesFired": this.rulesFired
 	}
 };
 
 Instance.prototype.run = function() {
 	var thisInstance = this;
-	var thisSession = this.session;
-	var thisFlow = this.flow;
+	var thisService = this.service;
+	var thisSession = this.service.session;
 
 	console.log("-----Start-----");
 
-	var promise = this.session.on("fire", function (ruleName) {
+	var promise = this.service.session.on("fire", function (ruleName) {
 		thisInstance.rulesFired.push(ruleName);
 	})
 	.match();
 
 	promise.then(function(){
-		console.log(thisSession.getFacts());
-		thisFlow.outputObjects.forEach(function (obj) {
-			var output = thisSession.getFacts(obj);
-			if(output.length) {
-				thisInstance.outputs = thisInstance.outputs.concat(thisSession.getFacts(obj));				
-			}
-		});		
-
-		console.log("Rules fired: ", thisInstance.rulesFired);
+		thisInstance.setOutputs();
 		thisInstance.dispose();
+		console.log("Rules fired: ", thisInstance.rulesFired);
 		console.log("-----Complete-----");
 	},
 	function(err){
@@ -75,8 +69,9 @@ Instance.prototype.run = function() {
 };
 
 Instance.prototype.dispose = function() {
-	this.session.dispose();
-	this.flow.dispose();
+	if(this.rulesService === "nools") {
+		this.service.dispose();
+	}
 };
 
 module.exports = Instance;

@@ -7,9 +7,56 @@ var NoolsService = function(data) {
 	this.outputs = data.Outputs.map(function(o) {return o.name});
 	this.nools = data.nools;
 
+	this.session;
 	this.inputObjects = [];
 	this.outputObjects = [];
 	this.loadCustomObjects();
+	this.setSession();
+};
+
+NoolsService.prototype.setInputs = function(inputs) {
+	var thisSession = this.session;
+	this.inputObjects.forEach(function(InputObject){
+		if(inputs[InputObject.paramLabel]) {
+			var input = new InputObject(inputs[InputObject.paramLabel]);
+			thisSession.assert(input);
+		}
+	});
+};
+
+NoolsService.prototype.setSession = function() {
+	var noolsNoolsService;
+
+	if(Nools.hasFlow(this.slug)) {
+		noolsNoolsService = Nools.getFlow(this.slug);
+	} else {
+		noolsNoolsService = Nools.compile(this.nools, {
+			name: this.slug,
+			scope: {
+				logger: String,
+				temp: {}
+			},
+			define: this.objectDefinitions()
+		});
+	}
+
+	this.session = noolsNoolsService.getSession();
+};
+
+NoolsService.prototype.getOutputs = function() {
+	var thisSession = this.session;
+	var returnOutputs = [];
+
+	this.outputObjects.forEach(function (obj) {
+		var output = thisSession.getFacts(obj);
+		if(output.length) {
+			output.forEach(function(o) {
+				returnOutputs.push(o[0].getDisplay());	
+			})			
+		}
+	});
+
+	return returnOutputs;
 };
 
 NoolsService.prototype.objectDefinitions = function() {
@@ -54,27 +101,8 @@ NoolsService.prototype.loadCustomObjects = function() {
 	});
 };
 
-NoolsService.prototype.getSession = function() {
-	var noolsNoolsService;
-
-	if(Nools.hasFlow(this.slug)) {
-		noolsNoolsService = Nools.getFlow(this.slug);
-	} else {
-		noolsNoolsService = Nools.compile(this.nools, {
-			name: this.slug,
-			scope: {
-				logger: String,
-				temp: {}
-			},
-			define: this.objectDefinitions()
-		});
-	}
-
-	return noolsNoolsService.getSession();
-};
-
-
 NoolsService.prototype.dispose = function() {
+	this.session.dispose();
 	Nools.deleteFlow(this.slug);
 };
 

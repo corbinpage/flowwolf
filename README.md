@@ -1,7 +1,6 @@
 # Flowwolf - Rule Engine API
 
 ## ToDo
-* Make 'Decision' a collection of rules
 * Add Priority to Rule
 * Add type, required, and default to inputs
 
