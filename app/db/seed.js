@@ -9,6 +9,7 @@ models.Decision.create({
 	"name": "Life Expectancy",
 	"description": "Life Expectancy around the world!",
 	"slug": "lifeExpectancy",
+	"service": "nools",
 	"nools": `
 	function returnDeathAge(gender, country) {
 		var countryList = ["USA", "Japan","Australia","France","Iceland"];
@@ -80,27 +81,99 @@ models.Rule.create({
 	"decision_id": 1,
 	"name": "Life Expectancy",
 	"slug": "lifeExpectancy",
+	"priority": 1,
 	"description": "Life Expectancy around the world!"
 });
 
 models.Input.bulkCreate([
-	{"id": 1, "name": "Gender", "decision_id": 1},
-	{"id": 2, "name": "Country", "decision_id": 1},
-	{"id": 3, "name": "Age", "decision_id": 1}
+	{"name": "Gender", "decision_id": 1},
+	{"name": "Country", "decision_id": 1},
+	{"name": "Age", "decision_id": 1}
 	]);
 
 models.Condition.bulkCreate([
-	{"input_id": 1, "operator": "=", value: "M", "rule_id": 1},
-	{"input_id": 2, "operator": "=", value: "USA", "rule_id": 1},
-	{"input_id": 3, "operator": "=", value: "28", "rule_id": 1}
+	{"input_id": 1, "expression": "temp", "rule_id": 1},
+	{"input_id": 2, "expression": "temp", "rule_id": 1},
+	{"input_id": 3, "expression": "temp", "rule_id": 1}
 	]);
 
 models.Output.bulkCreate([
-	{"id": 1, "name": "YearsLeft", "decision_id": 1},
-	{"id": 2, "name": "LifeExpectancy", "decision_id": 1}
+	{"name": "YearsLeft", "decision_id": 1},
+	{"name": "LifeExpectancy", "decision_id": 1}
 	]);
 
 models.Action.bulkCreate([
-	{"output_id": 1, value: "60", "decision_id": 1},
-	{"output_id": 2, value: "88", "decision_id": 1}
+	{"output_id": 1, "expression": "temp", "rule_id": 1},
+	{"output_id": 2, "expression": "temp", "rule_id": 1}
+	]);
+
+
+// Life Expectancy Rules
+// --------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------
+var RuleEngine = require('node-rules');
+var rules = [{
+	"priority": 4,
+	"condition": function(R) {
+		R.when(this.transactionTotal < 500);
+	},
+	"consequence": function(R) {
+		this.result = false;
+		this.reason = "The transaction was blocked as it was less than 500";
+		R.stop();
+	}
+}, {
+    "priority": 10, // this will apply first
+    "condition": function(R) {
+    	R.when(this.cardType === "Debit");
+    },
+    "consequence": function(R) {
+    	this.result = false;
+    	this.reason = "The transaction was blocked as debit cards are not allowed";
+    	R.stop();
+    }
+}];
+var R1 = new RuleEngine(rules);
+var store = R1.toJSON();
+
+console.log(store);
+store = "temp";
+
+models.Decision.create({
+	"id": 2,
+	"name": "Transaction",
+	"description": "Check whether a transaction is valid.",
+	"slug": "transaction",
+	"service": "node-rules",
+	"nools": store
+});
+
+models.Rule.create({
+	"decision_id": 2,
+	"name": "Too Low",
+	"priority": 4
+});
+
+models.Input.bulkCreate([
+	{"name": "name", "decision_id": 2},
+	{"name": "application", "decision_id": 2},
+	{"name": "transactionTotal", "decision_id": 2},
+	{"name": "cardType", "decision_id": 2}
+	]);
+
+models.Condition.bulkCreate([
+	{"input_id": 1, "expression": "temp", "rule_id": 2},
+	{"input_id": 2, "expression": "temp", "rule_id": 2},
+	{"input_id": 3, "expression": "temp", "rule_id": 2}
+	]);
+
+models.Output.bulkCreate([
+	{"name": "result", "decision_id": 2},
+	{"name": "reason", "decision_id": 2}
+	]);
+
+models.Action.bulkCreate([
+	{"output_id": 1, "expression": "temp", "rule_id": 2},
+	{"output_id": 2, "expression": "temp", "rule_id": 2}
 	]);

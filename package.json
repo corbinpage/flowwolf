@@ -2,9 +2,11 @@
   "name": "flowwolf",
   "version": "0.0.1",
   "private": true,
-  "config" : { "port" : "8080" },
+  "config": {
+    "port": "8080"
+  },
   "scripts": {
-    "start": "node ./bin/www",
+    "start": "supervisor ./bin/www",
     "migrate": "node ./app/db/migrate",
     "seed": "node ./app/db/seed"
   },
@@ -15,12 +17,14 @@
     "express": "~4.13.1",
     "jade": "~1.11.0",
     "morgan": "~1.6.1",
+    "node-rules": "^3.0.3",
     "nools": "^0.4.1",
     "promised-mongo": "^1.2.0",
     "q": "^1.4.1",
     "sequelize": "^3.17.1",
     "serve-favicon": "~2.3.0",
     "sqlite3": "^3.1.1",
+    "supervisor": "^0.9.1",
     "underscore": "^1.8.3",
     "underscore.string": "^3.2.2"
   },

@@ -9,7 +9,7 @@ GLOBAL._ = require('underscore');
 GLOBAL._s = require('underscore.string');
 global.__base = __dirname + '/';
 
-var routes = require(__base + 'app/routes/flowRoutes');
+var routes = require(__base + 'app/routes/routes');
 
 var app = express();
 

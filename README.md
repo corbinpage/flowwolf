@@ -26,7 +26,9 @@ Rules Engines
 * http://www.jessrules.com/jess/download.shtml
 * http://www.easyrules.org/
 * Javascript
-** https://www.npmjs.com/package/business-rules-engine - https://github.com/rsamec/business-rules-engine
 ** https://www.npmjs.com/package/node-rules
 ** https://github.com/C2FO/nools
-** http://www.webcodegeeks.com/javascript/node-js/rule-engine-for-node-js/
+** https://github.com/maxant/rules
+*** Super basic
+** https://github.com/rsamec/business-rules-engine
+*** More for validation rules
