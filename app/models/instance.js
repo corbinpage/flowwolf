@@ -6,8 +6,8 @@ var models = require(__base + 'app/models/index');
 var Instance = function(decision, inputs) {
 	this.decision_id = decision.id;
 	this.rulesService = decision.service;
-	this.setInputs(inputs);
-	this.outputs = [];
+	this.inputs = inputs;
+	this.outputs = {};
 	this.rulesFired = [];
 
 	var chosenService = (this.rulesService === "nools") ? NoolsService : nodeRulesService; 
@@ -15,20 +15,17 @@ var Instance = function(decision, inputs) {
 	this.service.setInputs(inputs);
 };
 
-Instance.prototype.setInputs = function(inputs) {
-	this.inputs = [];
+Instance.prototype.setOutputs = function(serviceFacts) {
+	this.outputs = {};
 	thisInstance = this;
-	if(inputs) {
-		Object.keys(inputs).forEach(function(k) {
-			var obj = {};
-			obj[k] = inputs[k];
-			thisInstance.inputs.push(obj);
-		});
-	}
-};
 
-Instance.prototype.setOutputs = function() {
-	this.outputs = this.service.getOutputs();
+	if(serviceFacts) {
+		Object.keys(serviceFacts).forEach(function(k) {
+			if(!thisInstance.inputs[k]) {
+				thisInstance.outputs[k] = serviceFacts[k];
+			}
+   });
+  }
 };
 
 Instance.prototype.display = function() { 
@@ -73,16 +70,16 @@ Instance.prototype.run = function() {
 	} else {
 		promise = this.service.run();
 		promise.then(function(data){
-			console.log('-----It Works-----');
-			console.log(data);
-			// thisInstance.setOutputs();
+      console.log("here");
+      console.log(data);
+			thisInstance.setOutputs(data);
 			// thisInstance.dispose();
-			// models.Run.create({
-			// 	"decision_id": thisInstance.decision_id,
-			// 	"inputs": JSON.stringify(thisInstance.inputs),
-			// 	"outputs": JSON.stringify(thisInstance.outputs),
-			// 	"rulesFired": JSON.stringify(thisInstance.rulesFired)
-			// });
+			models.Run.create({
+				"decision_id": thisInstance.decision_id,
+				"inputs": JSON.stringify(thisInstance.inputs),
+				"outputs": JSON.stringify(thisInstance.outputs),
+				"rulesFired": JSON.stringify(thisInstance.rulesFired)
+			});
 			// console.log("Rules fired: ", thisInstance.rulesFired);
 		});
 	}

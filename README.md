@@ -1,8 +1,14 @@
 # Flowwolf - Rule Engine API
 
 ## ToDo
-* Add Priority to Rule
 * Add type, required, and default to inputs
+* Get node-rules to work with promises
+** Possibly extend the library
+
+http://passportjs.org/
+
+Style
+https://github.com/felixge/node-style-guide
 
 ## Plans
 
