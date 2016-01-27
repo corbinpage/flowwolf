@@ -21,8 +21,6 @@ NodeRulesService.prototype.setRule = function(ruleData) {
   var conditionScript = vm.createScript('(' + ruleData.Conditions[0]["expression"] + ')');
   rule.condition = conditionScript.runInContext(context);
 
-  console.log(ruleData.Actions[0]["expression"]);
-
   var actionScript = vm.createScript(ruleData.Actions[0]["expression"]);
   rule.consequence = actionScript.runInContext(context);
 
@@ -42,7 +40,7 @@ NodeRulesService.prototype.setSession = function(rulesData) {
 NodeRulesService.prototype.run = function() {
 	var thisSession = this.session;
 
-	function executeRules (inputs) {
+	function executeAsync (inputs) {
 		var deferred = Q.defer();
 		thisSession.execute(inputs, function (data) {
 			if (!data) deferred.reject(data)
@@ -52,7 +50,7 @@ NodeRulesService.prototype.run = function() {
 		return deferred.promise
 	}
 
-	return executeRules(this.inputs);
+	return executeAsync(this.inputs);
 };
 
 module.exports = NodeRulesService;

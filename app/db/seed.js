@@ -108,7 +108,7 @@ var models = require(__base + 'app/models/index');
 // 	]);
 
 
-// Life Expectancy Rules
+// Transaction Rules
 // --------------------------------------------------------------------------------
 // --------------------------------------------------------------------------------
 // --------------------------------------------------------------------------------
@@ -153,8 +153,8 @@ decision.then(function(decision) {
 				]);
 
 			models.Action.bulkCreate([
-				{"rule_id": rules[0]["id"], "expression": "(function(R) { this.result = false; this.reason = 'The transaction was blocked as it was less than 500'; R.stop(); })"},
-				{"rule_id": rules[1]["id"], "expression": "(function(R) { this.result = false; this.reason = 'The transaction was blocked as debit cards are not allowed'; R.stop(); })"}
+				{"rule_id": rules[0]["id"], "expression": "(function(R) { this.results = false; this.reason = 'The transaction was blocked as it was less than 500'; R.stop(); })"},
+				{"rule_id": rules[1]["id"], "expression": "(function(R) { this.results = false; this.reason = 'The transaction was blocked as debit cards are not allowed'; R.stop(); })"}
 				]);
 		})
 	});

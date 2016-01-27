@@ -39,6 +39,7 @@ Instance.prototype.display = function() {
 Instance.prototype.run = function() {
 	var thisInstance = this;
 
+  console.log(thisInstance.inputs);
   var promise = this.service.run();
   promise.then(function(data){
    thisInstance.setOutputs(data);
