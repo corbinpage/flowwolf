@@ -3,7 +3,7 @@
 ## ToDo
 * Add type, required, and default to inputs
 * Get node-rules to work with promises
-** Possibly extend the library
+** Possibly extend the node-rules library
 
 http://passportjs.org/
 
