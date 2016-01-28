@@ -1,6 +1,7 @@
 var RuleEngine = require('node-rules');
 var Q = require('q');
 var vm = require('vm');
+var models = require(__base + 'app/models/index');
 
 var NodeRulesService = function(data) {
   this.inputs = {};
@@ -12,46 +13,13 @@ NodeRulesService.prototype.setInputs = function(inputs) {
   this.inputs = inputs;
 };
 
-NodeRulesService.prototype.createCondition = function(conditions) {
-  var context = vm.createContext({});
-  var expressions = conditions.map(function(c) {
-    return c.expression;
-  });
-
-  console.log(expressions);
-
-  var script = vm.createScript(
-    '(function(R) { R.when(' + 
-      expressions +
-      '); })'
-  );
-
-  return script.runInContext(context);
-}
-
-NodeRulesService.prototype.createAction = function(actions) {
-  var context = vm.createContext({});
-  var expressions = actions.map(function(a) {
-    return a.expression;
-  });
-
-  var script = vm.createScript(
-    '(function(R) {' +
-      expressions.join('; ') +
-      'R.stop();' +
-      '})'
-  );
-
-  return script.runInContext(context);
-}
-
 NodeRulesService.prototype.setRule = function(ruleData) {
   var context = vm.createContext({});
   var rule = {}
   rule.name = ruleData.name;
   rule.priority = ruleData.priority;
-  rule.condition = this.createCondition(ruleData.Conditions);
-  rule.consequence = this.createAction(ruleData.Actions);
+  rule.condition = models.Condition.formatForNodeRules(ruleData.Conditions);
+  rule.consequence = models.Action.formatForNodeRules(ruleData.Actions);
 
   return rule;
 }

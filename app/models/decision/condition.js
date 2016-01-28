@@ -1,3 +1,5 @@
+var vm = require('vm');
+
 module.exports = function(db, Sequelize) {
 	var Condition = db.define("Condition", {
 		id: {type: Sequelize.INTEGER, primaryKey: true},
@@ -6,11 +8,28 @@ module.exports = function(db, Sequelize) {
 		tableName: 'conditions',
 		underscored: true,
 		classMethods: {
+
 			associate: function(models) {
 				Condition.belongsTo(models.Rule)
-			}
-		}
-	});
+			},
+
+			formatForNodeRules: function(conditions) {
+        var context = vm.createContext({});
+        var expressions = conditions.map(function(c) {
+          return c.expression;
+        });
+
+        var script = vm.createScript(
+          '(function(R) { R.when(' + 
+            expressions +
+            '); })'
+        );
+
+        return script.runInContext(context);
+      }
+
+    }
+  });
 
 	return Condition;
 };

@@ -131,7 +131,7 @@ decision.then(function(decision) {
 		]);
 
 	models.Output.bulkCreate([
-		{"name": "result", "decision_id": decision.id},
+		{"name": "results", "decision_id": decision.id},
 		{"name": "reason", "decision_id": decision.id}
 		]);
 
