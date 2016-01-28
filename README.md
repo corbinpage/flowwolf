@@ -1,6 +1,7 @@
 # Flowwolf - Rule Engine API
 
 ## ToDo
+* Add Life Expectancy rule
 * Add type, required, and default to inputs
 * Get node-rules to work with promises
 ** Possibly extend the node-rules library
