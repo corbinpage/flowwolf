@@ -108,7 +108,7 @@ var models = require(__base + 'app/models/index');
 // 	]);
 
 
-// Transaction Rules
+// Life Expectancy Rules
 // --------------------------------------------------------------------------------
 // --------------------------------------------------------------------------------
 // --------------------------------------------------------------------------------
@@ -148,14 +148,17 @@ decision.then(function(decision) {
 		}).then(function(rules) {
 
 			models.Condition.bulkCreate([
-				{"rule_id": rules[0]["id"], "expression": "(function(R) { R.when(this.transactionTotal < 500); })"},
-				{"rule_id": rules[1]["id"], "expression": "(function(R) { R.when(this.cardType === 'Debit') })"}
+				{"rule_id": rules[0]["id"], "expression": "this.transactionTotal < 500"},
+				{"rule_id": rules[1]["id"], "expression": "this.cardType === 'Debit'"}
 				]);
 
 			models.Action.bulkCreate([
-				{"rule_id": rules[0]["id"], "expression": "(function(R) { this.results = false; this.reason = 'The transaction was blocked as it was less than 500'; R.stop(); })"},
-				{"rule_id": rules[1]["id"], "expression": "(function(R) { this.results = false; this.reason = 'The transaction was blocked as debit cards are not allowed'; R.stop(); })"}
+				{"rule_id": rules[0]["id"], "expression": "this.results = false;"},
+				{"rule_id": rules[0]["id"], "expression": "this.reason = 'The transaction was blocked as it was less than 500';"},
+				{"rule_id": rules[1]["id"], "expression": "this.results = false;"},
+				{"rule_id": rules[1]["id"], "expression": "this.reason = 'The transaction was blocked as debit cards are not allowed';"}
 				]);
+
 		})
 	});
 });
