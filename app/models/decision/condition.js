@@ -20,12 +20,17 @@ module.exports = function(db, Sequelize) {
         });
 
         var script = vm.createScript(
-          '(function(R) { R.when(' + 
+          '(function(R) {' + 
+
+            'console.log("' + expressions + '");' +
+            'console.log(' + expressions + ');' +
+
+            'R.when(' + 
             expressions +
             '); })'
         );
 
-        return script.runInContext(context);
+        return script.runInThisContext(context);
       }
 
     }

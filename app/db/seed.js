@@ -3,108 +3,72 @@ var Sequelize = require('sequelize');
 var db = require(__base + 'app/db/db');
 var models = require(__base + 'app/models/index');
 
+var decision = models.Decision.create({
+	"id": 1,
+	"name": "Life Expectancy",
+	"description": "Life Expectancy around the world!",
+	"slug": "lifeExpectancy",
+	"service": "node-rules"
+});
 
-// 	function returnDeathAge(gender, country) {
-// 		var countryList = ["USA", "Japan","Australia","France","Iceland"];
-// 		var averageLifeExpectancy = [77, 84, 72, 71, 72];
-// 		var maleLifeExpectancy = [78, 80, 71, 71, 72];
-// 		var femaleLifeExpectancy = [76, 87, 73, 71, 72];
+decision.then(function(decision) {
 
-// 		var ageArray = averageLifeExpectancy;
-// 		if(gender.value === 'M') {
-// 			ageArray = maleLifeExpectancy;
-// 		} else if(gender.value === 'F') {
-// 			ageArray = femaleLifeExpectancy;
-// 		}
+	models.Input.bulkCreate([
+		{"name": "gender", "decision_id": decision.id},
+		{"name": "country", "decision_id": decision.id},
+		{"name": "age", "decision_id": decision.id}
+		]);
 
-// 		var countryIndex = countryList.indexOf(country.value);
-// 		if(countryIndex === -1) {
-// 			var sum = 0;
-// 			ageArray.forEach(function(num){sum+=parseFloat(num) || 0;});
-// 			sum = Math.round(sum/ageArray.length);
-// 			return sum;
-// 		} else {
-// 			return ageArray[countryIndex];
-// 		}
+	models.Output.bulkCreate([
+		{"name": "countryArray", "decision_id": decision.id},
+		{"name": "yearsLeft", "decision_id": decision.id},
+		{"name": "lifeExpectancy", "decision_id": decision.id}
+		]);
 
-// 	}
+	var rules = models.Rule.bulkCreate([
+		{"decision_id": decision.id, "name":"getGenderArrayM", "order": 1},
+		{"decision_id": decision.id, "name":"getGenderArrayF", "order": 2},
+		{"decision_id": decision.id, "name":"getGenderArrayElse", "order": 3},
+		{"decision_id": decision.id, "name":"getDeathAge", "order": 4},
+		{"decision_id": decision.id, "name":"getYearsLeft", "order": 5}
+		]);
 
-// 	rule LifeExpectancy {
-// 		salience: 11;
-// 		when {
-// 			gender : Gender;
-// 			country : Country;
-// 			yearsLeft: YearsLeft;
-// 			lifeExpectancy: LifeExpectancy;
-// 		}
-// 		then {
-// 			if(!lifeExpectancy.value) {
-// 				lifeExpectancy.value = returnDeathAge(gender, country);
-// 			}
-// 		}
-// 	}
+	rules.then(function(data) {
 
-// 	rule YearsLeft {
-// 		salience: 10;
-// 		when {
-// 			age : Age;
-// 			yearsLeft: YearsLeft;
-// 			lifeExpectancy: LifeExpectancy;
-// 		}
-// 		then {
-// 			yearsLeft.value = lifeExpectancy.value  - age.value;
-// 		}
-// 	}
-// 	`
-// });
+		models.Rule.findAll({
+			where: {decision_id: decision.id},
+		}).then(function(rules) {
 
-// var decision = models.Decision.create({
-// 	"id": 2,
-// 	"name": "Life Expectancy",
-// 	"description": "Life Expectancy around the world!",
-// 	"slug": "lifeExpectancy",
-// 	"service": "node-rules"
-// });
+			models.Condition.bulkCreate([
 
-// decision.then(function(decision) {
+				{"rule_id": rules[0]["id"], "expression": "this.gender === 'M'"},
+				{"rule_id": rules[1]["id"], "expression": "this.gender === 'F'"},
+				{"rule_id": rules[2]["id"], "expression": "!this.countryArray"},
+				{"rule_id": rules[3]["id"], "expression": "this.country !== null && this.ageArray !== null"},
+				{"rule_id": rules[4]["id"], "expression": "this.lifeExpectancy >= this.age"}
+				]);
 
-// 	models.Input.bulkCreate([
-// 		{"name": "gender", "decision_id": decision.id},
-// 		{"name": "country", "decision_id": decision.id},
-// 		{"name": "age", "decision_id": decision.id}
-// 		]);
+			models.Action.bulkCreate([
+				{"rule_id": rules[0]["id"], "expression": "console.log('0');this.ageArray = [78, 80, 71, 71, 72];R.next();"},
+				{"rule_id": rules[1]["id"], "expression": "console.log('1');this.ageArray = [76, 87, 73, 71, 72];R.next();"},
+				{"rule_id": rules[2]["id"], "expression": "console.log('2');this.ageArray = [77, 84, 72, 71, 72];R.next();"},
+				{"rule_id": rules[3]["id"], "expression": "console.log('4');this.lifeExpectancy = this.ageArray[['usa', 'japan','australia','france','iceland'].indexOf(this.country.toLowerCase())];R.next();"},
+				{"rule_id": rules[4]["id"], "expression": "console.log('5');this.yearsLeft = this.lifeExpectancy - this.age; R.stop();"}
+				]);
 
-// 	models.Output.bulkCreate([
-// 		{"name": "yearsLeft", "decision_id": decision.id},
-// 		{"name": "lifeExpectancy", "decision_id": decision.id}
-// 		]);
+		})
+	});
+});
 
-// 	var rules = models.Rule.bulkCreate([
-// 		{"decision_id": decision.id, "name":"getDeathAge", "priority": 10},
-// 		{"decision_id": decision.id, "name":"getYearsLeft", "priority": 4}
-// 		]);
 
-// 	rules.then(function(data) {
 
-// 		models.Rule.findAll({
-// 			where: {decision_id: decision.id},
-// 		}).then(function(rules) {
 
-// 			models.Condition.bulkCreate([
-// 				{"rule_id": rules[0]["id"], "expression": "this.transactionTotal < 500"},
-// 				{"rule_id": rules[1]["id"], "expression": "this.lifeExpectancy >= this.age"}
-// 				]);
 
-// 			models.Action.bulkCreate([
-// 				{"rule_id": rules[0]["id"], "expression": "this.results = false;"},
-// 				{"rule_id": rules[0]["id"], "expression": "this.reason = 'The transaction was blocked as it was less than 500';"},
-// 				{"rule_id": rules[1]["id"], "expression": "this.results = false"},
-// 				{"rule_id": rules[1]["id"], "expression": "this.lifeExpectancy = this.yearsLeft - this.age"}
-// 				]);
 
-// 		})
-// 	});
-// });
+
+
+
+
 
 // Transaction Rules
 // --------------------------------------------------------------------------------
@@ -112,7 +76,7 @@ var models = require(__base + 'app/models/index');
 // --------------------------------------------------------------------------------
 
 var decision = models.Decision.create({
-	"id": 1,
+	"id": 2,
 	"name": "Transaction",
 	"description": "Check whether a transaction is valid.",
 	"slug": "transaction",
@@ -134,8 +98,8 @@ decision.then(function(decision) {
 		]);
 
 	var rules = models.Rule.bulkCreate([
-		{"decision_id": decision.id, "name":"isDebit", "priority": 10},
-		{"decision_id": decision.id, "name":"Less than 500", "priority": 4}
+		{"decision_id": decision.id, "name":"isDebit", "order": 1},
+		{"decision_id": decision.id, "name":"Less than 500", "order": 2}
 		]);
 
 	rules.then(function(data) {
@@ -150,10 +114,10 @@ decision.then(function(decision) {
 				]);
 
 			models.Action.bulkCreate([
-				{"rule_id": rules[0]["id"], "expression": "this.results = false;"},
-				{"rule_id": rules[0]["id"], "expression": "this.reason = 'The transaction was blocked as it was less than 500';"},
-				{"rule_id": rules[1]["id"], "expression": "this.results = false;"},
-				{"rule_id": rules[1]["id"], "expression": "this.reason = 'The transaction was blocked as debit cards are not allowed';"}
+				{"rule_id": rules[0]["id"], "expression": "this.results = false"},
+				{"rule_id": rules[0]["id"], "expression": "this.reason = 'The transaction was blocked as it was less than 500'"},
+				{"rule_id": rules[1]["id"], "expression": "this.results = false"},
+				{"rule_id": rules[1]["id"], "expression": "this.reason = 'The transaction was blocked as debit cards are not allowed'"}
 				]);
 
 		})

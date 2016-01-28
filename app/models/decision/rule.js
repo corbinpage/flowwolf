@@ -3,7 +3,7 @@ module.exports = function(db, Sequelize) {
 		id: {type: Sequelize.INTEGER, primaryKey: true},
 		name: { type: Sequelize.STRING},
 		description: { type: Sequelize.TEXT},
-		priority: { type: Sequelize.INTEGER},
+		order: { type: Sequelize.INTEGER},
 		slug: { type: Sequelize.STRING}
 	}, {
 		tableName: 'rules',

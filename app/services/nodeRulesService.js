@@ -17,7 +17,7 @@ NodeRulesService.prototype.setRule = function(ruleData) {
   var context = vm.createContext({});
   var rule = {}
   rule.name = ruleData.name;
-  rule.priority = ruleData.priority;
+  rule.priority = 1000 - ruleData.order;
   rule.condition = models.Condition.formatForNodeRules(ruleData.Conditions);
   rule.consequence = models.Action.formatForNodeRules(ruleData.Actions);
 
@@ -30,8 +30,7 @@ NodeRulesService.prototype.setSession = function(rulesData) {
     return thisService.setRule(r);
   })
 
-  this.session = new RuleEngine();
-  this.session.register(rules);
+  this.session = new RuleEngine(rules, {ignoreFactChanges: true});
 };
 
 NodeRulesService.prototype.run = function() {

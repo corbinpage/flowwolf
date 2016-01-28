@@ -22,11 +22,11 @@ module.exports = function(db, Sequelize) {
         var script = vm.createScript(
           '(function(R) {' +
             expressions.join('; ') +
-            'R.stop();' +
+            // 'R.stop();' +
             '})'
         );
 
-        return script.runInContext(context);
+        return script.runInThisContext(context);
       }
 
     }
