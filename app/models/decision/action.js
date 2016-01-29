@@ -15,15 +15,16 @@ module.exports = function(db, Sequelize) {
 
 			formatForNodeRules: function(actions) {
         var context = vm.createContext({});
+        
         var expressions = actions.map(function(a) {
           return a.expression;
-        });
+        })
+        .join('; ')
+        .concat(';');          
 
         var script = vm.createScript(
           '(function(R) {' +
-            
-            expressions.join('; ') +
-
+            expressions +
             'R.next();' +
             '})'
         );

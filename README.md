@@ -5,6 +5,12 @@
 * Add type, required, and default to inputs
 * Get node-rules to work with promises
 ** Possibly extend the node-rules library
+* executionType - execute all or stop
+* UI
+** Create rules
+** show edit rule history
+** Show previous runs
+** Test Rules
 
 http://passportjs.org/
 

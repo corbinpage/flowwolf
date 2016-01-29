@@ -22,8 +22,14 @@ router.get('/decision/:decision_slug', function(req, res, next) {
 			var instance = new Instance(decision, req.query);
 			var promise = instance.run();
 
-			promise.then(function(){
-				res.jsonp(instance.display());
+			promise.then(function(results){
+
+				console.log(instance);
+
+				res.render('show', {
+					decision: decision,
+					results: results
+				});
 			})
 			.catch(function(err){
 				var err = new Error('Unable to run Decision.');

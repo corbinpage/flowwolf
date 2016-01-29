@@ -3,6 +3,7 @@ module.exports = function(db, Sequelize) {
 		id: {type: Sequelize.INTEGER, primaryKey: true},
 		name: { type: Sequelize.STRING},
 		description: { type: Sequelize.TEXT},
+		executionType: { type: Sequelize.STRING},
 		slug: { type: Sequelize.STRING},
 		service: { type: Sequelize.STRING},
 		nools: { type: Sequelize.TEXT}

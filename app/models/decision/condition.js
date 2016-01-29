@@ -15,23 +15,17 @@ module.exports = function(db, Sequelize) {
 
 			formatForNodeRules: function(conditions) {
         var context = vm.createContext({});
-        var expressions = conditions.map(function(c) {
-          return c.expression;
-        });
+
+        var expressions = conditions.map(function(a) {
+            return a.expression;
+          })
+          .join(' && ');
 
         var script = vm.createScript(
           '(function(R) {' + 
-
-            'console.log(1000 - R.rule().priority + ": " + R.rule().name);' +
-            'console.log("' + expressions + '");' +
-            'console.log(' + expressions + ');' +
-
-            'console.log(R.rule().on);' +
-            'console.log(R.rule().priority);' +
-
             'R.when(' + 
-            expressions.join(' && ') +
-            '); })'
+              expressions +
+              '); })'
         );
 
         return script.runInThisContext(context);

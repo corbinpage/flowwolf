@@ -44,6 +44,7 @@ Instance.prototype.run = function() {
 		thisInstance.setOutputs(results.data);
 		var run_id = thisInstance.saveRun(results.conditionRuns);
 		thisInstance.run_id = run_id
+		thisInstance.conditionRuns = results.conditionRuns;
 	});
 
 	return promise;

@@ -15,7 +15,8 @@ var app = express();
 
 // view engine setup
 app.set('views', path.join(__base, 'app/views'));
-app.set('view engine', 'jade');
+app.set('view engine', 'html');
+app.engine('html', require('hbs').__express);
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__base, 'public', 'favicon.ico')));
