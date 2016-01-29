@@ -21,8 +21,10 @@ module.exports = function(db, Sequelize) {
 
         var script = vm.createScript(
           '(function(R) {' +
+            
             expressions.join('; ') +
-            // 'R.stop();' +
+
+            'R.next();' +
             '})'
         );
 

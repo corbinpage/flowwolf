@@ -22,11 +22,15 @@ module.exports = function(db, Sequelize) {
         var script = vm.createScript(
           '(function(R) {' + 
 
+            'console.log(1000 - R.rule().priority + ": " + R.rule().name);' +
             'console.log("' + expressions + '");' +
             'console.log(' + expressions + ');' +
 
+            'console.log(R.rule().on);' +
+            'console.log(R.rule().priority);' +
+
             'R.when(' + 
-            expressions +
+            expressions.join(' && ') +
             '); })'
         );
 

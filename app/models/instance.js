@@ -38,22 +38,30 @@ Instance.prototype.display = function() {
 
 Instance.prototype.run = function() {
 	var thisInstance = this;
-
 	var promise = this.service.run();
-	
-	promise.then(function(data){
-		thisInstance.setOutputs(data);
-		models.Run.create({
-			"decision_id": thisInstance.decision_id,
-			"inputs": JSON.stringify(thisInstance.inputs),
-			"outputs": JSON.stringify(thisInstance.outputs),
-			"rulesFired": JSON.stringify(thisInstance.rulesFired)
-		});
-			// console.log("Rules fired: ", thisInstance.rulesFired);
-		});
 
+	promise.then(function(results){
+		thisInstance.setOutputs(results.data);
+		var run_id = thisInstance.saveRun(results.conditionRuns);
+		thisInstance.run_id = run_id
+	});
 
 	return promise;
+};
+
+Instance.prototype.saveRun = function(conditionRuns) {
+	var thisInstance = this;
+
+	var run = models.Run.create({
+		"decision_id": thisInstance.decision_id,
+		"inputs": JSON.stringify(thisInstance.inputs),
+		"outputs": JSON.stringify(thisInstance.outputs),
+		"rulesFired": JSON.stringify(thisInstance.rulesFired)
+	});
+
+	models.ConditionRun.bulkCreate(conditionRuns);
+
+	return run.id;
 };
 
 module.exports = Instance;

@@ -1,4 +1,4 @@
-var RuleEngine = require('node-rules');
+var RuleEngine = require(__base + 'app/services/node-rules');
 var Q = require('q');
 var vm = require('vm');
 var models = require(__base + 'app/models/index');
@@ -15,11 +15,13 @@ NodeRulesService.prototype.setInputs = function(inputs) {
 
 NodeRulesService.prototype.setRule = function(ruleData) {
   var context = vm.createContext({});
-  var rule = {}
+  var rule = {};
+  rule.id = ruleData.id;
   rule.name = ruleData.name;
   rule.priority = 1000 - ruleData.order;
   rule.condition = models.Condition.formatForNodeRules(ruleData.Conditions);
   rule.consequence = models.Action.formatForNodeRules(ruleData.Actions);
+
 
   return rule;
 }
@@ -38,10 +40,11 @@ NodeRulesService.prototype.run = function() {
 
   function executeAsync (inputs) {
     var deferred = Q.defer();
-    thisSession.execute(inputs, function (data) {
-      if (!data) deferred.reject(data)
-        else deferred.resolve(data)
-          deferred.resolve(data)
+    thisSession.execute(inputs, function (data, conditionRuns) {
+      var results = {"data": data, "conditionRuns": conditionRuns, };
+      if (!data) deferred.reject(results)
+        else deferred.resolve(results)
+          deferred.resolve(results)
       })
     return deferred.promise
   }

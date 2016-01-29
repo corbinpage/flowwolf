@@ -49,11 +49,11 @@ decision.then(function(decision) {
 				]);
 
 			models.Action.bulkCreate([
-				{"rule_id": rules[0]["id"], "expression": "console.log('0');this.ageArray = [78, 80, 71, 71, 72];R.next();"},
-				{"rule_id": rules[1]["id"], "expression": "console.log('1');this.ageArray = [76, 87, 73, 71, 72];R.next();"},
-				{"rule_id": rules[2]["id"], "expression": "console.log('2');this.ageArray = [77, 84, 72, 71, 72];R.next();"},
-				{"rule_id": rules[3]["id"], "expression": "console.log('4');this.lifeExpectancy = this.ageArray[['usa', 'japan','australia','france','iceland'].indexOf(this.country.toLowerCase())];R.next();"},
-				{"rule_id": rules[4]["id"], "expression": "console.log('5');this.yearsLeft = this.lifeExpectancy - this.age; R.stop();"}
+				{"rule_id": rules[0]["id"], "expression": "console.log('0');this.ageArray = [78, 80, 71, 71, 72];"},
+				{"rule_id": rules[1]["id"], "expression": "console.log('1');this.ageArray = [76, 87, 73, 71, 72];"},
+				{"rule_id": rules[2]["id"], "expression": "console.log('2');this.ageArray = [77, 84, 72, 71, 72];"},
+				{"rule_id": rules[3]["id"], "expression": "console.log('4');this.lifeExpectancy = this.ageArray[['usa', 'japan','australia','france','iceland'].indexOf(this.country.toLowerCase())];"},
+				{"rule_id": rules[4]["id"], "expression": "console.log('5');this.yearsLeft = this.lifeExpectancy - this.age;"}
 				]);
 
 		})
