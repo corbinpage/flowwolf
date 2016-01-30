@@ -52,7 +52,7 @@ decision.then(function(decision) {
 				{"rule_id": rules[0]["id"], "expression": "this.ageArray = [78, 80, 71, 71, 72]"},
 				{"rule_id": rules[1]["id"], "expression": "this.ageArray = [76, 87, 73, 71, 72]"},
 				{"rule_id": rules[2]["id"], "expression": "this.ageArray = [77, 84, 72, 71, 72]"},
-				{"rule_id": rules[3]["id"], "expression": "this.lifeExpectancy = this.ageArray[['usa', 'japan','australia','france','iceland'].indexOf(this.country.toLowerCase())]"},
+				{"rule_id": rules[3]["id"], "expression": "this.lifeExpectancy = this.ageArray[['usa', 'japan','australia','france','iceland'].indexOf(this.country ? this.country.toLowerCase() : '')]"},
 				{"rule_id": rules[4]["id"], "expression": "this.yearsLeft = this.lifeExpectancy - this.age"}
 				]);
 

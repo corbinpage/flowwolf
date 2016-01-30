@@ -4,9 +4,9 @@ var Instance = require(__base + 'app/models/instance');
 var models = require(__base + 'app/models/index');
 
 /* GET decision */
-router.get('/decision/:decision_slug', function(req, res, next) {
+router.get('/decision/:slug', function(req, res, next) {
 	models.Decision.findOne({
-		where: {slug: req.params.decision_slug},
+		where: {slug: req.params.slug},
 		include: [models.Input, models.Output, 
 		{
 			model: models.Rule,
@@ -23,12 +23,10 @@ router.get('/decision/:decision_slug', function(req, res, next) {
 			var promise = instance.run();
 
 			promise.then(function(results){
-
-				console.log(instance);
-
 				res.render('show', {
 					decision: decision,
-					results: results
+					results: results,
+					layout: 'layout/default'
 				});
 			})
 			.catch(function(err){
@@ -39,7 +37,7 @@ router.get('/decision/:decision_slug', function(req, res, next) {
 		}
 	},
 	function(err){
-		var err = new Error('Database call error.');
+		var err = new Error('Database unavailable.');
 		err.status = 404;
 		next(err);
 	});

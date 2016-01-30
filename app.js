@@ -15,6 +15,7 @@ var app = express();
 
 // view engine setup
 app.set('views', path.join(__base, 'app/views'));
+
 app.set('view engine', 'html');
 app.engine('html', require('hbs').__express);
 
@@ -44,7 +45,8 @@ if (app.get('env') === 'development') {
     res.status(err.status || 500);
     res.render('error', {
       message: err.message,
-      error: err
+      error: err,
+      layout: 'layout/default'
     });
   });
 }
@@ -55,7 +57,8 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error', {
     message: err.message,
-    error: {}
+    error: {},
+    layout: 'layout/default'
   });
 });
 
