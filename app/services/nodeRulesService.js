@@ -22,7 +22,6 @@ NodeRulesService.prototype.setRule = function(ruleData) {
   rule.condition = models.Condition.formatForNodeRules(ruleData.Conditions);
   rule.consequence = models.Action.formatForNodeRules(ruleData.Actions);
 
-
   return rule;
 }
 

@@ -40,61 +40,50 @@ Instance.prototype.setInputs = function(inputs) {
 	}
 };
 
-Instance.prototype.setOutputs = function(serviceFacts) {
-	this.outputs = {};
-	thisInstance = this;
-
-	if(serviceFacts) {
-		Object.keys(serviceFacts).forEach(function(k) {
-			if(!thisInstance.inputs[k]) {
-				thisInstance.outputs[k] = serviceFacts[k];
-			}
-		});
-	}
-};
-
 Instance.prototype.run = function() {
 	var thisInstance = this;
-	var promise = this.service.run();
 
-	promise.then(function(results){
-		thisInstance.setOutputs(results.data);
-		var run_id = thisInstance.saveRun(results.conditionRuns);
-		thisInstance.run_id = run_id
-		thisInstance.conditionRuns = results.conditionRuns;
-	});
+	var promise = this.service.run()
+	.then(this.saveRun)
 
 	return promise;
 };
 
-Instance.prototype.saveRun = function(conditionRuns) {
-	var thisInstance = this;
+Instance.prototype.saveRun = function(results) {
+	var thisInstance = this.thisInstance;
+	var run_id;
+	var inputRuns = [];
+	var conditionRuns = [];
 
-	models.Run.create({
+	var promise = models.Run.create({
 		decision_id: thisInstance.decision_id,
-		// InputRuns: thisInstance.inputs,
-		"outputs": JSON.stringify(thisInstance.outputs),
+		"outputs": JSON.stringify(results.data),
 		"rulesFired": JSON.stringify(thisInstance.rulesFired)
 	})
 	.then(function(run) {
-		run.id = run.null;
+		run_id = run.null;
 
-		var inputRuns = thisInstance.inputs.map(function(i) {
-			i.run_id = run.id;
+		inputRuns = thisInstance.inputs.map(function(i) {
+			i.run_id = run_id;
 			return i;
 		});
 
-		models.InputRun.bulkCreate(inputRuns);
-
-		conditionRuns = conditionRuns.map(function(c) {
-			c.run_id = run.id;
+		conditionRuns = results.conditionRuns.map(function(c) {
+			c.run_id = run_id;
 			return c;
 		});
-
-		models.ConditionRun.bulkCreate(conditionRuns);
-
-		return run.id;
 	})
+	.then(function() {
+		return models.InputRun.bulkCreate(inputRuns);
+	})
+	.then(function() {
+		return models.ConditionRun.bulkCreate(conditionRuns);
+	})
+	.then(function() {
+		return run_id;
+	});
+
+	return promise;
 };
 
 module.exports = Instance;

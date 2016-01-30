@@ -22,18 +22,28 @@ router.get('/decision/:slug', function(req, res, next) {
 			var instance = new Instance(decision, req.query);
 			var promise = instance.run();
 
-			promise.then(function(results){
-				res.render('show', {
-					decision: decision,
-					results: results,
-					layout: 'layout/default'
-				});
+			promise
+			.then(function(run_id){
+				models.Run.findOne({
+					where: {id: run_id},
+					include: [models.InputRun, models.ConditionRun]
+				})
+				.then(function(run) {
+
+					console.log(run.ConditionRuns);
+
+					res.render('run/show', {
+						decision: decision,
+						run: run,
+						layout: 'layout/default'
+					});
+				})
 			})
-			.catch(function(err){
+			.fail(function(err){
 				var err = new Error('Unable to run Decision.');
 				err.status = 404;
 				next(err);
-			});
+			})
 		}
 	},
 	function(err){
