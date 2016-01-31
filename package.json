@@ -6,7 +6,7 @@
     "port": "8080"
   },
   "scripts": {
-    "start": "supervisor ./bin/www",
+    "start": "supervisor -e 'js,html' ./bin/www",
     "migrate": "node ./app/db/migrate",
     "seed": "node ./app/db/seed",
     "db-setup": "npm run migrate && npm run seed"

@@ -5,6 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
+var hbs = require('hbs');
 GLOBAL._ = require('underscore');
 GLOBAL._s = require('underscore.string');
 global.__base = __dirname + '/';
@@ -18,6 +19,7 @@ app.set('views', path.join(__base, 'app/views'));
 
 app.set('view engine', 'html');
 app.engine('html', require('hbs').__express);
+hbs.registerPartials(path.join(__base, 'app/views/rule'));
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__base, 'public', 'favicon.ico')));
