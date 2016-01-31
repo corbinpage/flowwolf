@@ -11,8 +11,7 @@ router.get('/decision/:slug', function(req, res, next) {
 		{
 			model: models.Rule,
 			include: [models.Condition, models.Action]
-		}
-		]
+		}]
 	}).then(function(decision) {
 		if(!decision) {
 			var err = new Error('Decision not found.');
@@ -24,22 +23,24 @@ router.get('/decision/:slug', function(req, res, next) {
 
 			promise
 			.then(function(run_id){
-				models.Run.findOne({
+				return models.Run.findOne({
 					where: {id: run_id},
-					include: [models.InputRun, models.ConditionRun]
-				})
-				.then(function(run) {
-
-					console.log(run.ConditionRuns);
-
-					res.render('run/show', {
-						decision: decision,
-						run: run,
-						layout: 'layout/default'
-					});
+					include: [models.InputRun, 
+					{
+						model: models.ConditionRun,
+						include: [models.Rule]
+					}],
+					order: ['ConditionRuns.id']
 				})
 			})
-			.fail(function(err){
+			.then(function(run) {
+				res.render('run/show', {
+					decision: decision,
+					run: run,
+					layout: 'layout/default'
+				});
+			})
+			.catch(function(err){
 				var err = new Error('Unable to run Decision.');
 				err.status = 404;
 				next(err);

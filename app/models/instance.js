@@ -30,6 +30,10 @@ Instance.prototype.setInputs = function(inputs) {
 			var recognized = inputParams.indexOf(i) !== -1;
 			var input_id = recognized ? inputParamIds[inputParams.indexOf(i)] : null
 
+			console.log(i);
+			console.log(recognized);
+			console.log(inputParams);
+
 			thisInstance.inputs.push({
 				param: i,
 				value: inputs[i],
