@@ -1,0 +1,61 @@
+<div class="container">
+	<div class="row">
+		<h1>{{ decision.id }}  - {{ decision.name }}</h1>
+		<p>{{ decision.description }}</p>
+		<div class="container">
+			<div class="row">
+				<div class="col-sm-4">
+					<h3>Inputs</h3>
+					<table class="table table-bordered table-hover">
+						<thead>
+							<tr> <th>Name</th> </tr>
+						</thead>
+						<tbody>
+							{{#decision.Inputs}}
+							<tr>
+								<td>{{name}}</td>
+							</tr>
+							{{/decision.Inputs}}
+						</tbody>
+					</table>	
+				</div>
+				<div class="col-sm-4">
+					<h3>Outputs</h3>
+					<table class="table table-bordered table-hover">
+						<thead>
+							<tr> <th>Name</th> </tr>
+						</thead>
+						<tbody>
+							{{#decision.Outputs}}
+							<tr>
+								<td>{{name}}</td>
+							</tr>
+							{{/decision.Outputs}}
+						</tbody>
+					</table>	
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-6">
+					<h3>Rules</h3>
+					<table class="table table-bordered table-hover">
+						<thead>
+							<tr> <th>Order</th> <th>Name</th> </tr>
+						</thead>
+						<tbody>
+
+							{{#decision.Rules}}
+							<tr>
+								<td>{{order}}</td> <td>{{name}}</td>
+							</tr>
+							{{/decision.Rules}}
+
+						</tbody>
+					</table>
+					<a class="disabled btn btn-default" href="/decision/{{decision.slug}}/run?{{#run.InputRuns}}{{param}}={{value}}&{{/run.InputRuns}}" role="button">Test</a>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
