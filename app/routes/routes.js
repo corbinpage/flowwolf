@@ -1,25 +1,26 @@
 var express = require('express');
 var router = express.Router();
+var passport = require('passport');
 var Instance = require(__base + 'app/models/instance');
 var models = require(__base + 'app/models/index');
 
 /* Home */
 router.get('/', function(req, res) {
-	res.redirect('/decision');
+  res.redirect('/decision');
 });
 
 /* INDEX Decisions */
 router.get('/decision', function(req, res, next) {
-	models.Decision.findAll({
-		order: ['id']
-	})
-	.then(function(decisions) {
-		res.render('decision', {
-			decisions: decisions,
-			layout: 'layout/default'
-		});
+  models.Decision.findAll({
+   order: ['id']
+ })
+  .then(function(decisions) {
+   res.render('decision', {
+    decisions: decisions,
+    layout: 'layout/default'
+  });
 
-	})
+ })
 });
 
 /* SHOW Decision */
@@ -43,38 +44,40 @@ router.get('/decision/:slug', function(req, res, next) {
 });
 
 /* GET decision run */
-router.get('/decision/:slug/run', function(req, res, next) {
-	models.Decision.findOne({
-		where: {slug: req.params.slug},
-		include: [models.Input, models.Output, 
-		{
-			model: models.Rule,
-			include: [models.Condition, models.Action]
-		}]
-	})
-	.then(function(decision) {
-		if(!decision) {
-			var err = new Error('Decision not found.');
-			err.status = 404;
-			next(err);
-		} else {
-			var instance = new Instance(decision, req.query);
-			instance.run()
-			.then(function(run_id){
-				res.redirect('/decision/' + decision.slug + '/run/' + run_id);
-			})
-			.catch(function(err){
-				var err = new Error('Unable to run Decision.');
+router.get('/decision/:slug/run',
+	// passport.authenticate('basic', {session: false }),
+	function(req, res, next) {
+		models.Decision.findOne({
+			where: {slug: req.params.slug},
+			include: [models.Input, models.Output, 
+			{
+				model: models.Rule,
+				include: [models.Condition, models.Action]
+			}]
+		})
+		.then(function(decision) {
+			if(!decision) {
+				var err = new Error('Decision not found.');
 				err.status = 404;
 				next(err);
-			})
-		}
-	},
-	function(err){
-		throwError(err);
-	});
+			} else {
+				var instance = new Instance(decision, req.query);
+				instance.run()
+				.then(function(run_id){
+					res.redirect('/decision/' + decision.slug + '/run/' + run_id);
+				})
+				.catch(function(err){
+					var err = new Error('Unable to run Decision.');
+					err.status = 404;
+					next(err);
+				})
+			}
+		},
+		function(err){
+			throwError(err);
+		});
 
-});
+	});
 
 /* GET run */
 router.get('/decision/:slug/run/:id', function(req, res, next) {

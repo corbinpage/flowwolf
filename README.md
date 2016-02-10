@@ -13,6 +13,7 @@
 ** Test Rules
 
 http://passportjs.org/
+https://github.com/jaredhanson/passport-http
 
 Style
 https://github.com/felixge/node-style-guide

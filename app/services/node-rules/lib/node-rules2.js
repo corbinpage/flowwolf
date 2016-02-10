@@ -111,14 +111,14 @@
         return _.filter(this.rules, find);
       }
     }
-    RuleEngine.prototype.turn = function(state, filter) {
-      var state = (state === "on" || state === "ON") ? true : false;
-      var rules = this.findRules(filter);
-      for (var i = 0, j = rules.length; i < j; i++) {
-        rules[i].on = state;
-      }
-      this.sync();
-    }
+    // RuleEngine.prototype.turn = function(state, filter) {
+    //   var state = (state === "on" || state === "ON") ? true : false;
+    //   var rules = this.findRules(filter);
+    //   for (var i = 0, j = rules.length; i < j; i++) {
+    //     rules[i].on = state;
+    //   }
+    //   this.sync();
+    // }
     RuleEngine.prototype.prioritize = function(priority, filter) {
       priority = parseInt(priority, 10);
       var rules = this.findRules(filter);

@@ -1,16 +1,39 @@
 var express = require('express');
 var path = require('path');
+var passport = require('passport');
+var BasicStrategy = require('passport-http').BasicStrategy;
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var hbs = require('hbs');
+
 GLOBAL._ = require('underscore');
 GLOBAL._s = require('underscore.string');
 global.__base = __dirname + '/';
 
+var models = require(__base + 'app/models/index');
+
+
 var routes = require(__base + 'app/routes/routes');
+
+// Configure the Basic strategy for use by Passport.
+//
+// The Basic strategy requires a `verify` function which receives the
+// credentials (`username` and `password`) contained in the request.  The
+// function must verify that the password is correct and then invoke `cb` with
+// a user object, which will be set at `req.user` in route handlers after
+// authentication.
+passport.use(new BasicStrategy(
+  function(username, password, cb) {
+    models.User.findByUsername(username, function(err, user) {
+      if (err) { return cb(err); }
+      if (!user) { return cb(null, false); }
+      if (user.password != password) { return cb(null, false); }
+      return cb(null, user);
+    });
+  }));
 
 var app = express();
 

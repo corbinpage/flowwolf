@@ -20,6 +20,8 @@
     "hbs": "^4.0.0",
     "morgan": "~1.6.1",
     "nools": "^0.4.1",
+    "passport": "^0.3.2",
+    "passport-http": "^0.3.0",
     "promised-mongo": "^1.2.0",
     "q": "^1.4.1",
     "sequelize": "^3.17.1",
