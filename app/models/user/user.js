@@ -8,7 +8,7 @@ module.exports = function(db, Sequelize) {
 	}, {
 		tableName: 'users',
 		underscored: true,
-		classMethods: {
+		classMethods: { 
 			associate: function(models) {
 				// User.belongsTo(models.Decision),
 				// User.hasMany(models.Condition),
@@ -21,16 +21,6 @@ module.exports = function(db, Sequelize) {
 				.then(function(user) {
 					return user ? cb(null, user) : cb(null, null);
 				})
-
-				// process.nextTick(function() {
-				// 	for (var i = 0, len = records.length; i < len; i++) {
-				// 		var record = records[i];
-				// 		if (record.username === username) {
-				// 			return cb(null, record);
-				// 		}
-				// 	}
-				// 	return cb(null, null);
-				// });
 			}
 		}
 	});
