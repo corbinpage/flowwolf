@@ -19,6 +19,7 @@ block content
 						tr(class=i.recognized ? 'success' : 'danger') 
 							td= i.param
 							td= i.value
+			a(class='btn btn-default' href='/decision/#{decision.slug}/run?#{run.InputRuns}#{param}=#{value}&#{/run.InputRuns}' role='button') Test Again 
 		.col-sm-9
 			h3 Outcomes
 			table.table.table-bordered.table-hover.table-striped 
@@ -28,7 +29,6 @@ block content
 						th Name
 				tbody 
 					each c in run.ConditionRuns
-						tr(class=c.recognized ? 'success' : 'danger')
+						tr(class=c.outcome ? 'success' : 'danger')
 							td= c.order
 							td= c.Rule.name
-			a(class='btn btn-default' href='/decision/#{decision.slug}/run?#{run.InputRuns}#{param}=#{value}&#{/run.InputRuns}' role='button') Test Again 
