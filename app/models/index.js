@@ -2,7 +2,7 @@ var fs = require("fs");
 var db = require(__base + 'app/db/db');
 
 var models = {};
-var directories = ['/user', '/decision', '/run'];
+var directories = ['/decision', '/run'];
 
 var pathes = [];
 directories.forEach(function(d){

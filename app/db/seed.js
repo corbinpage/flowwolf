@@ -3,12 +3,12 @@ var Sequelize = require('sequelize');
 var db = require(__base + 'app/db/db');
 var models = require(__base + 'app/models/index');
 
-models.User.bulkCreate([
-	{"username": "cpage", "password": "test", "displayName": "Corbin", "email": "corbin.page@gmail.com"},
-	{"username": "jselt", "password": "test", "displayName": "Jess", "email": "corbin.page@gmail.com"},
-	{"username": "bpage", "password": "test", "displayName": "Brett", "email": "corbin.page@gmail.com"},
-	{"username": "aconley", "password": "test", "displayName": "Alex", "email": "corbin.page@gmail.com"}
-	]);
+// models.User.bulkCreate([
+// 	{"username": "cpage", "password": "test", "displayName": "Corbin", "email": "corbin.page@gmail.com"},
+// 	{"username": "jselt", "password": "test", "displayName": "Jess", "email": "corbin.page@gmail.com"},
+// 	{"username": "bpage", "password": "test", "displayName": "Brett", "email": "corbin.page@gmail.com"},
+// 	{"username": "aconley", "password": "test", "displayName": "Alex", "email": "corbin.page@gmail.com"}
+// 	]);
 
 var decision = models.Decision.create({
 	"id": 1,

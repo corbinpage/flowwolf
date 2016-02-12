@@ -15,6 +15,9 @@
 http://passportjs.org/
 https://github.com/jaredhanson/passport-http
 
+API Stuff
+http://apigee.com/about/
+
 Style
 https://github.com/felixge/node-style-guide
 
