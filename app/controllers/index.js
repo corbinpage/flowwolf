@@ -15,9 +15,9 @@ var apiController = require(__base + 'app/controllers/api');
 var contactController = require(__base + 'app/controllers/contact');
 
 /* Home */
-router.get('/', function(req, res) {
-  res.redirect('/decision');
-});
+// router.get('/', function(req, res) {
+//   res.redirect('/decision');
+// });
 
 /* INDEX Decisions */
 router.get('/decision', function(req, res, next) {
@@ -26,8 +26,7 @@ router.get('/decision', function(req, res, next) {
  })
   .then(function(decisions) {
    res.render('decision', {
-    decisions: decisions,
-    layout: 'layout/default'
+    decisions: decisions
   });
 
  })

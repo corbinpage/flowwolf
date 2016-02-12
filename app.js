@@ -20,8 +20,8 @@ var sass = require('node-sass-middleware');
 
 GLOBAL.__base = __dirname + '/';
 
-// GLOBAL._ = require('underscore');
-// GLOBAL._s = require('underscore.string');
+GLOBAL._ = require('underscore');
+GLOBAL._s = require('underscore.string');
 // var models = require(__base + 'app/models/index');
 
 /**

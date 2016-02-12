@@ -1,8 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var passport = require('passport');
-var Instance = require(__base + 'app/models/instance');
-var models = require(__base + 'app/models/index');
+
 
 /* Home */
 router.get('/', function(req, res) {

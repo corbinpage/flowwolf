@@ -1,0 +1,34 @@
+extends ../layout
+
+block content
+	.row
+		h1 #{decision.id}  - #{decision.name} 
+		p= decision.description
+		.container 
+		.row 
+		h2 Results
+		.col-sm-3
+			h3 Inputs
+			table.table.table-bordered.table-hover.table-striped 
+				thead 
+				tr
+					th Order
+					th Name
+				tbody
+					each i in run.InputRuns
+						tr(class=i.recognized ? 'success' : 'danger') 
+							td= i.param
+							td= i.value
+		.col-sm-9
+			h3 Outcomes
+			table.table.table-bordered.table-hover.table-striped 
+				thead 
+					tr
+						th Order
+						th Name
+				tbody 
+					each c in run.ConditionRuns
+						tr(class=c.recognized ? 'success' : 'danger')
+							td= c.order
+							td= c.Rule.name
+			a(class='btn btn-default' href='/decision/#{decision.slug}/run?#{run.InputRuns}#{param}=#{value}&#{/run.InputRuns}' role='button') Test Again 
