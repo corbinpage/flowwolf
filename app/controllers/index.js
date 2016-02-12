@@ -5,10 +5,10 @@ var passportConf = require(__base + 'config/passport');
 var multer = require('multer');
 var path = require('path');
 var upload = multer({ dest: path.join(__base, 'uploads') });
-var homeController = require(__base + 'controllers/home');
-var userController = require(__base + 'controllers/user');
-var apiController = require(__base + 'controllers/api');
-var contactController = require(__base + 'controllers/contact');
+var homeController = require(__base + 'app/controllers/home');
+var userController = require(__base + 'app/controllers/user');
+var apiController = require(__base + 'app/controllers/api');
+var contactController = require(__base + 'app/controllers/contact');
 
 router.get('/', homeController.index);
 router.get('/login', userController.getLogin);

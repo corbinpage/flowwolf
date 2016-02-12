@@ -1,6 +1,3 @@
-/**
- * Module dependencies.
- */
 var _ = require('lodash');
 var express = require('express');
 var cookieParser = require('cookie-parser');
@@ -52,16 +49,16 @@ mongoose.connection.on('error', function() {
  * Express configuration.
  */
 app.set('port', process.env.PORT || 3000);
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__base, 'app/views'));
 app.set('view engine', 'jade');
 app.use(compress());
 app.use(sass({
-  src: path.join(__dirname, 'public'),
-  dest: path.join(__dirname, 'public'),
+  src: path.join(__base, 'public'),
+  dest: path.join(__base, 'public'),
   sourceMap: true
 }));
 app.use(logger('dev'));
-app.use(favicon(path.join(__dirname, 'public', 'favicon.png')));
+app.use(favicon(path.join(__base, 'public', 'favicon.png')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(expressValidator());
@@ -98,12 +95,12 @@ app.use(function(req, res, next) {
   }
   next();
 });
-app.use(express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 }));
+app.use(express.static(path.join(__base, 'public'), { maxAge: 31557600000 }));
 
 /**
  * Primary app routes.
  */
-var routes = require(__base + 'controllers/index');
+var routes = require(__base + 'app/controllers/index');
 app.use('/', routes);
 
 /**
